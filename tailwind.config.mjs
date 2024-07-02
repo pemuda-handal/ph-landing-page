@@ -10,9 +10,12 @@ export default {
 				'inter': ['Inter', 'sans-serif'],	
 			},
 			colors: {
-				'primary': '#7241FF',
-			},
+				'primary':'#7241FF',
+				'secondary':'#7B78FF',
+				'third':'#353879'
+			}
 		},
+	},
 	plugins: [],
 	}
 }
