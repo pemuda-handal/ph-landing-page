@@ -13,7 +13,7 @@ export default {
         primary: "#7241FF",
         secondary: "#7B78FF",
         tertiary: "#353879",
-        quartenary: "#646464",
+        quartenary: "#646464"
       },
     },
   },
