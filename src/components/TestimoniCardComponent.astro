@@ -1,0 +1,45 @@
+---
+const { title, author, company, description, stars } = Astro.props;
+let array = new Array(stars).fill(0);
+---
+
+<div
+  class="flex flex-col gap-10 p-5 lg:p-10 rounded-xl lg:rounded-3xl bg-white shadow-md shadow-primary/20 justify-between h-full"
+>
+  <div class="flex flex-col gap-5">
+    <p class="font-bold text-2xl lg:text-3xl line-clamp-2">
+      {title || "Sangat Bermanfaat!"}
+    </p>
+    <p class="text-[#6D6D6D] text-sm lg:text-base text-left line-clamp-6">
+      {
+        description ||
+          "vintero kami meningkatkan kunjungan dan penjualan properti dengan cara yang sangat efektif. Pelanggan kami sangat menyukai pengalaman virtual tour yang ditawarkan"
+      }
+    </p>
+  </div>
+
+  <div class="flex flex-col gap-1">
+    <div class="flex flex-row -ms-1">
+      {
+        array.map((data) => (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24px"
+            height="24px"
+            viewBox="0 0 24 24"
+            class="text-yellow-300"
+          >
+            <path
+              fill="currentColor"
+              d="m5.825 21l1.625-7.025L2 9.25l7.2-.625L12 2l2.8 6.625l7.2.625l-5.45 4.725L18.175 21L12 17.275z"
+            />
+          </svg>
+        ))
+      }
+    </div>
+    <p class="font-bold text-sm lg:text-base">{author || "Arif Wiranata"}</p>
+    <p class="text-[#6D6D6D] text-xs lg:text-sm">
+      {company || "Pendekar Naga Api"}
+    </p>
+  </div>
+</div>
