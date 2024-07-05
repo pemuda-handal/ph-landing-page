@@ -1,0 +1,12 @@
+---
+const { title, customClass } = Astro.props;
+---
+
+<div>
+  <button
+    class=`py-4 px-6 bg-primary rounded-full flex flex-row items-center gap-2 text-white font-bold hover:bg-secondary hover:duration-150 ${customClass}`
+  >
+    <slot />
+    {title}
+  </button>
+</div>
