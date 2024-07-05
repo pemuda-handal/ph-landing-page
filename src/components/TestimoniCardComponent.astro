@@ -4,13 +4,13 @@ let array = new Array(stars).fill(0);
 ---
 
 <div
-  class="flex flex-col gap-10 p-10 rounded-3xl bg-white shadow-md shadow-primary/20 w-full justify-between lg:w-full"
+  class="flex flex-col gap-10 p-5 lg:p-10 rounded-xl lg:rounded-3xl bg-white shadow-md shadow-primary/20 justify-between h-full"
 >
   <div class="flex flex-col gap-5">
     <p class="font-bold text-2xl lg:text-3xl line-clamp-2">
       {title || "Sangat Bermanfaat!"}
     </p>
-    <p class="text-[#6D6D6D] text-left line-clamp-6 lg:text-2xl">
+    <p class="text-[#6D6D6D] text-sm lg:text-base text-left line-clamp-6">
       {
         description ||
           "vintero kami meningkatkan kunjungan dan penjualan properti dengan cara yang sangat efektif. Pelanggan kami sangat menyukai pengalaman virtual tour yang ditawarkan"
@@ -18,8 +18,8 @@ let array = new Array(stars).fill(0);
     </p>
   </div>
 
-  <div class="flex flex-col gap-2">
-    <div class="flex flex-row">
+  <div class="flex flex-col gap-1">
+    <div class="flex flex-row -ms-1">
       {
         array.map((data) => (
           <svg
@@ -37,7 +37,9 @@ let array = new Array(stars).fill(0);
         ))
       }
     </div>
-    <p class="font-bold text-2xl">{author || "Arif Wiranata"}</p>
-    <p class="text-[#6D6D6D]">{company || "Pendekar Naga Api"}</p>
+    <p class="font-bold text-sm lg:text-base">{author || "Arif Wiranata"}</p>
+    <p class="text-[#6D6D6D] text-xs lg:text-sm">
+      {company || "Pendekar Naga Api"}
+    </p>
   </div>
 </div>
