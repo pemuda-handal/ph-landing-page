@@ -39,7 +39,7 @@
 <div class="relative z-10 w-32 font-bold">
   <button
     on:click={toggleLanguageSelectorPopUp}
-    class="flex flex-row gap-3 p-4 justify-between items-center w-full"
+    class="flex flex-row gap-5 p-4 justify-start items-center w-full"
   >
     {#if currentLang == "id"}
       <svg
@@ -109,7 +109,7 @@
         : 'flex-col-reverse'}"
     >
       <button
-        class="p-4 flex flex-row gap-3 justify-between items-center w-full"
+        class="p-4 flex flex-row gap-5 justify-start items-center w-full"
         on:click={() => changeLanguage("id")}
       >
         <svg
@@ -141,7 +141,7 @@
       </button>
       <div class="border-b border-black border-opacity-50 w-3/4 mx-auto"></div>
       <button
-        class="p-4 flex flex-row gap-3 justify-between items-center w-full"
+        class="p-4 flex flex-row gap-5 justify-start items-center w-full"
         on:click={() => changeLanguage("en")}
       >
         <svg
