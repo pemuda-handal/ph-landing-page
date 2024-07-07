@@ -1,3 +1,5 @@
+import { transform } from 'typescript'
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
@@ -15,7 +17,24 @@ export default {
         tertiary: "#353879",
         quartenary: "#646464"
       },
+      keyframes: {
+        slide: {
+          '0%' : {
+            transform: 'translateX(0)'
+          },
+          '100%' : {
+            transform: 'translateX(-100%)'
+          }
+        },
+        slide2: {
+          '0%' : {
+            transform: 'translateX(100%)'
+          },
+          '100%' : {
+            transform: 'translateX(0%)'
+          }
+        },
+      },
     },
-  },
   plugins: [],
-};
+}};
