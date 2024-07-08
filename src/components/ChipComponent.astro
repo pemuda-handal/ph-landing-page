@@ -1,0 +1,22 @@
+---
+const { emote, name } = Astro.props;
+---
+
+<div
+  class="flex flex-row gap-2 py-4 px-6 bg-chip/10 rounded-3xl items-center justify-center text-primary hover:bg-black hover:text-white group"
+>
+  <span class="group-hover:hidden">
+    <img src={emote.src} alt="" class="" />
+  </span>
+
+  <svg
+    class="group-hover:block hidden"
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    ><path fill="currentColor" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z"
+    ></path></svg
+  >
+  <p class="font-bold capitalize text-chipText">{name}</p>
+</div>

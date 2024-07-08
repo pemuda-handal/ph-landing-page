@@ -1,0 +1,171 @@
+---
+import Meteor from "../../public/meteor.png";
+import Product from "../../public/product.png";
+import ChipComponent from "../components/ChipComponent.astro";
+import CardComponent from "../components/CardComponent.astro";
+import Perumahan from "../../public/perumahan.svg";
+import Museum from "../../public/museum.svg";
+import Restaurant from "../../public/restaurant.svg";
+import Hotel from "../../public/hotel.svg";
+import Destination from "../../public/destination.svg";
+
+const chipComponents = [
+  {
+    name: "perumahan",
+    svg: Perumahan,
+  },
+  {
+    name: "hotel",
+    svg: Hotel,
+  },
+  {
+    name: "Restauran",
+    svg: Restaurant,
+  },
+  {
+    name: "Museum",
+    svg: Museum,
+  },
+  {
+    name: "Destinasi Wisata",
+    svg: Destination,
+  },
+];
+
+const services = [
+  {
+    title: "Kemudahan Publikasi",
+    detail: "",
+    image: Product,
+    link: "www.google.com",
+    titleLink: "Selengkapnya",
+  },
+  {
+    title: "Kemudahan Publikasi",
+    detail: "",
+    image: Product,
+    link: "www.google.com",
+    titleLink: "Selengkapnya",
+  },
+  {
+    title: "Kemudahan Publikasi",
+    detail: "",
+    image: Product,
+    link: "www.google.com",
+    titleLink: "Selengkapnya",
+  },
+  {
+    title: "Kemudahan Publikasi",
+    detail: "",
+    image: Product,
+    link: "www.google.com",
+    titleLink: "Selengkapnya",
+  },
+  {
+    title: "Kemudahan Publikasi",
+    detail: "",
+    image: Product,
+    link: "www.google.com",
+    titleLink: "Selengkapnya",
+  },
+  {
+    title: "Kemudahan Publikasi",
+    detail: "",
+    image: Product,
+    link: "www.google.com",
+    titleLink: "Selengkapnya",
+  },
+  {
+    title: "Kemudahan Publikasi",
+    detail: "",
+    image: Product,
+    link: "www.google.com",
+    titleLink: "Selengkapnya",
+  },
+];
+---
+
+<div class="w-full">
+  <div
+    class="px-5 flex flex-col items-center w-full gap-20 lg:flex-row lg:overflow-auto lg:items-stretch"
+  >
+    <div
+      class="product flex flex-col items-center gap-20 lg:w-1/2 lg:px-20 lg:justify-between lg:items-start"
+    >
+      <img src={Meteor.src} alt="" />
+      <div class="flex flex-col items-center gap-5 lg:items-start">
+        <p class="font-bold text-2xl lg:text-5xl lg:leading-[78px]">
+          Solusi Bisnis <br class="hidden lg:block" />Terbaik
+        </p>
+        <div
+          class="flex flex-row gap-2 flex-wrap justify-center lg:justify-start"
+        >
+          {
+            chipComponents.map((data) => {
+              return <ChipComponent name={data.name} emote={data.svg} />;
+            })
+          }
+        </div>
+      </div>
+    </div>
+    <div class="card flex flex-col gap-10 lg:flex-row lg:w-1/2 py-2">
+      {
+        services.map((data) => {
+          return (
+            <CardComponent
+              title={data.title}
+              detail={data.detail}
+              image={data.image.src}
+              link={data.link}
+              customClass="h-auto justify-between min-w-[66%]"
+              titleLink={data.titleLink}
+            />
+          );
+        })
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .product {
+    animation: productMove 2s ease-in;
+  }
+  .card {
+    animation: cardMove 2s ease-in;
+  }
+
+  @keyframes productMove {
+    0% {
+      transform: translate(200%, -3%);
+      color: #7241ff;
+    }
+    50% {
+      transform: translateX(-10%);
+      color: #7b78ff;
+    }
+    100% {
+      transform: translateX(0%);
+      color: #353879;
+    }
+  }
+
+  @keyframes cardMove {
+    0% {
+      transform: translate(200%, 30%);
+      color: #7241ff;
+    }
+    50% {
+      transform: translate(-10%, 10%);
+      color: #7b78ff;
+    }
+    75% {
+      transform: translateX(3%);
+      color: #7b78ff;
+    }
+    100% {
+      transform: translateX(0%);
+      color: #353879;
+    }
+  }
+</style>
