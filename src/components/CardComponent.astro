@@ -1,5 +1,5 @@
 ---
-const { title, detail, image, customClass, link } = Astro.props;
+const { title, detail, image, customClass, link, titleLink } = Astro.props;
 ---
 
 <div
@@ -30,7 +30,7 @@ const { title, detail, image, customClass, link } = Astro.props;
       <button
         class="font-bold text-primary flex flex-row items-center gap-5 justify-center"
       >
-        <a href={link} target="_blank">Baca Selengkapnya</a>
+        <a href={link} target="_blank">{titleLink || "Baca Selengkapnya"}</a>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24px"
