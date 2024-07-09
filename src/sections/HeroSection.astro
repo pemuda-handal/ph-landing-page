@@ -3,13 +3,13 @@ import ButtonComponent from "../components/ButtonComponent.astro";
 import HeroImage from "../../public/hero-img.png";
 ---
 
-<div class="flex flex-col h-screen gap-5">
-  <div
-    class="flex flex-col-reverse items-center px-5 md:flex-row lg:px-[120px]"
-  >
-    <div class="flex flex-col gap-[80px] flex-1">
+<section
+  class="flex flex-col px-5 py-10 lg:py-28 lg:px-20 max-w-screen-xl xl:px-0 xl:mx-auto items-center justify-center gap-5"
+>
+  <div class="flex flex-col-reverse items-center px-5 md:flex-row lg:px-16">
+    <div class="flex flex-col gap-20 md:items-start flex-1">
       <div class="flex flex-col gap-5">
-        <p class="font-bold text-2xl lg:text-5xl lg:w-full">
+        <p class="font-bold text-2xl lg:text-3xl xl:text-5xl lg:w-full">
           Jelajahi <span class="text-primary"> Masa Depan </span>Digital
           <br />
           dengan <span class="text-primary">Pemuda Handal</span>
@@ -19,7 +19,7 @@ import HeroImage from "../../public/hero-img.png";
         </p>
       </div>
       <ButtonComponent
-        customClass="w-full item-center justify-center lg:w-auto"
+        customClass="w-full justify-center lg:w-auto"
         title="Jadwalkan Demo"
         ><svg
           xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +33,7 @@ import HeroImage from "../../public/hero-img.png";
         ></ButtonComponent
       >
     </div>
-    <div class="flex-1 flex justify-center">
+    <div class="flex-1 lg:w-2/5 lg:flex-none flex justify-center">
       <img src={HeroImage.src} alt="" class="img-hero scale-x-[-1]" />
     </div>
   </div>
@@ -54,4 +54,4 @@ import HeroImage from "../../public/hero-img.png";
       }
     }
   </style>
-</div>
+</section>
