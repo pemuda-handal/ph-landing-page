@@ -20,7 +20,7 @@ export default {
         tertiary: "#353879",
         quartenary: "#646464",
         chip: "#7211F214",
-        chipText: "##7211F2",
+        chipText: "#7211F2",
       },
       keyframes: {
         slide: {
