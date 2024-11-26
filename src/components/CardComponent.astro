@@ -1,8 +1,11 @@
 ---
+import { Image } from "astro:assets";
+import Project11 from "@assets/images/project-1-1.png";
+
 interface Props {
   title: string;
   detail: string;
-  image: string;
+  image: ImageMetadata;
   customClass: string;
   link: string;
   titleLink?: string;
@@ -22,7 +25,7 @@ const {
 <div
   class=`flex flex-col rounded-3xl shadow-card gap-5 bg-white ${customClass}`
 >
-  <img
+  <Image
     src={image || "https://picsum.photos/200"}
     alt=""
     class="w-full aspect-video rounded-t-3xl object-cover"

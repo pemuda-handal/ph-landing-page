@@ -1,11 +1,11 @@
 ---
-import Destination from "../../public/destination.svg";
-import Hotel from "../../public/hotel.svg";
-import Meteor from "../../public/meteor.png";
-import Museum from "../../public/museum.svg";
-import Perumahan from "../../public/perumahan.svg";
-import Product from "../../public/product.png";
-import Restaurant from "../../public/restaurant.svg";
+import Destination from "@assets/images/destination.svg";
+import Hotel from "@assets/images/hotel.svg";
+import Meteor from "@assets/images/meteor.png";
+import Museum from "@assets/images/museum.svg";
+import Perumahan from "@assets/images/perumahan.svg";
+import Product from "@assets/images/product.png";
+import Restaurant from "@assets/images/restaurant.svg";
 import CardComponent from "../components/CardComponent.astro";
 import ChipComponent from "../components/ChipComponent.astro";
 
@@ -123,7 +123,7 @@ const services = [
             <CardComponent
               title={data.title}
               detail={data.detail}
-              image={data.image.src}
+              image={data.image}
               link={data.link}
               customClass="min-w-[60%]"
               titleLink={data.titleLink}

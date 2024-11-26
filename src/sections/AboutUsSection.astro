@@ -1,3 +1,9 @@
+---
+import AboutImg from "@assets/images/about-img.png";
+import QuestionMark from "@assets/images/question-mark.svg";
+import Rocket from "@assets/images/rocket.svg";
+---
+
 <section
   class="flex flex-col lg:pt-32 lg:pb-20 w-screen gap-20 px-5 py-10 lg:py-20 lg:px-20 max-w-screen-xl xl:px-0 xl:mx-auto"
   id="about"
@@ -16,7 +22,7 @@
     </div>
     <div class="flex lg:flex-1 items-center justify-center">
       <img
-        src="/about-img.png"
+        src={AboutImg.src}
         alt="Handshake Image"
         class="w-3/4 md:w-1/2 lg:w-3/4"
       />
@@ -27,7 +33,7 @@
       <div
         class="flex gap-4 items-center justify-center font-bold lg:text-lg lg:justify-start"
       >
-        <img src="/question-mark.svg" alt="" class="w-6 h-6" />Siapa Kami ?
+        <img src={QuestionMark.src} alt="" class="w-6 h-6" />Siapa Kami ?
       </div>
       <p class="text-center text-sm lg:text-base lg:text-left">
         Pemuda Handal adalah perusahaan yang bergerak di bidang perangkat lunak
@@ -40,7 +46,7 @@
       <div
         class="flex gap-4 items-center justify-center font-bold lg:text-lg lg:justify-start"
       >
-        <img src="/rocket.svg" alt="" class="w-6 h-6" />Visi Kami
+        <img src={Rocket.src} alt="" class="w-6 h-6" />Visi Kami
       </div>
       <p class="text-center text-sm lg:text-base lg:text-left">
         Menjadi mitra terpercaya dalam transformasi digital yang memberdayakan

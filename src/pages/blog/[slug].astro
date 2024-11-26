@@ -6,6 +6,8 @@ import { marked } from "marked";
 import { Image } from "astro:assets";
 import HeaderBlog from "../../components/HeaderBlog.astro";
 import ConnectSection from "../../sections/ConnectSection.astro";
+import Logo from "@assets/images/logo.png";
+
 interface Blog {
   id: number;
   attributes: {
@@ -153,7 +155,7 @@ if (!isVisited && visitedCounter < 32767) {
 }
 ---
 
-<script is:inline define:vars={{ blog }}>
+<script is:inline define:vars={{ blog, Logo }}>
   console.log(blog);
   document.addEventListener("DOMContentLoaded", function () {
     const h2s = document.querySelectorAll("h2");
@@ -176,7 +178,7 @@ if (!isVisited && visitedCounter < 32767) {
       const duplicatedHeader = document.createElement("div");
       duplicatedHeader.innerHTML = header.innerHTML;
       duplicatedHeader.querySelector(".logo-wrapper").innerHTML =
-        `<a href="/"><img src="/logo.png" alt="PemudaHandal Logo" class="w-40 h-10 object-cover" /></a>`;
+        `<a href="/"><img src="${Logo.src}" alt="PemudaHandal Logo" class="w-40 h-10 object-cover" /></a>`;
       duplicatedHeader.classList.add(
         "fixed-header",
         "fixed",

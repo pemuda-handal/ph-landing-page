@@ -1,4 +1,8 @@
-<script is:inline>
+---
+import Logo from "@assets/images/logo.png";
+---
+
+<script is:inline define:vars={{ Logo }}>
   function openNavbar() {
     const menu = document.querySelector("#menu");
     menu?.classList.add("-translate-x-full");
@@ -16,13 +20,11 @@
       if (device.matches) {
         header.classList.remove("text-black");
         header.classList.add("text-white");
-        logoWrapper.innerHTML =
-          '<a href="/"><img src="/logo.png" alt="PemudaHandal Logo" class="w-40 h-10 object-cover" /></a>';
+        logoWrapper.innerHTML = `<a href="/"><img src="${Logo.src}" alt="PemudaHandal Logo" class="w-40 h-10 object-cover" /></a>`;
       } else {
         header.classList.remove("text-white");
         header.classList.add("text-black");
-        logoWrapper.innerHTML =
-          '<a href="/"><img src="/logo.png" alt="PemudaHandal Logo" class="w-40 h-10 object-cover" /></a>';
+        logoWrapper.innerHTML = `<a href="/"><img src="${Logo.src}" alt="PemudaHandal Logo" class="w-40 h-10 object-cover" /></a>`;
       }
     }
 
@@ -62,7 +64,7 @@
 >
   <div class="flex w-full items-center justify-between">
     <a href="/">
-      <img src="/logo.png" alt="logo" class="w-40 h-10 object-cover" />
+      <img src={Logo.src} alt="logo" class="w-40 h-10 object-cover" />
     </a>
     <button onclick="closeNavbar()">
       <svg
