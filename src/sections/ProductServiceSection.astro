@@ -4,7 +4,11 @@ import Hotel from "@assets/images/hotel.svg";
 import Meteor from "@assets/images/meteor.png";
 import Museum from "@assets/images/museum.svg";
 import Perumahan from "@assets/images/perumahan.svg";
-import Product from "@assets/images/product.png";
+import ProductLanding from "@assets/images/products/product-landing.png";
+import ProductMobileApp from "@assets/images/products/product-mobile-app.png";
+import ProductUIDesign from "@assets/images/products/product-ui-ux-design.png";
+import ProductVintero from "@assets/images/products/product-vintero.png";
+import ProductWebApp from "@assets/images/products/product-web-app.png";
 import Restaurant from "@assets/images/restaurant.svg";
 import CardComponent from "../components/CardComponent.astro";
 import ChipComponent from "../components/ChipComponent.astro";
@@ -34,56 +38,103 @@ const chipComponents = [
 
 const services = [
   {
-    title: "Kemudahan Publikasi",
-    detail: "lorem",
-    image: Product,
-    link: "www.google.com",
+    title: "VinteroVR",
+    detail:
+      "Solusi terbaik untuk pemasaran properti Anda. Dengan teknologi 360° Virtual Tour, Anda dapat menampilkan properti Anda dengan lebih interaktif dan menarik.",
+    image: ProductVintero,
+    link: "https://vinterovr.com",
     titleLink: "Selengkapnya",
   },
   {
-    title: "Kemudahan Publikasi",
-    detail: "",
-    image: Product,
-    link: "www.google.com",
+    title: "Landing Page",
+    detail:
+      "Maksimalkan kesan pertama bisnis Anda melalui landing page yang dirancang secara profesional, dengan fokus pada estetika dan efektivitas konversi.",
+    image: ProductLanding,
     titleLink: "Selengkapnya",
   },
   {
-    title: "Kemudahan Publikasi",
-    detail: "",
-    image: Product,
-    link: "www.google.com",
+    title: "Aplikasi Web",
+    detail:
+      "Kami menciptakan aplikasi web yang tidak hanya terlihat menarik, tetapi juga mampu mendukung kebutuhan operasional dan efisiensi bisnis Anda.",
+    image: ProductWebApp,
     titleLink: "Selengkapnya",
   },
   {
-    title: "Kemudahan Publikasi",
-    detail: "",
-    image: Product,
-    link: "www.google.com",
+    title: "Aplikasi Mobile",
+    detail:
+      "Raih audiens yang lebih luas melalui aplikasi mobile yang dirancang khusus untuk perangkat Android dan iOS, dengan performa tinggi dan fitur yang relevan",
+    image: ProductMobileApp,
     titleLink: "Selengkapnya",
   },
   {
-    title: "Kemudahan Publikasi",
-    detail: "",
-    image: Product,
-    link: "www.google.com",
+    title: "UI/UX Design",
+    detail:
+      "Tingkatkan pengalaman pengguna dengan desain UI/UX yang elegan, intuitif, dan berorientasi pada kenyamanan pelanggan",
+    image: ProductUIDesign,
     titleLink: "Selengkapnya",
   },
   {
-    title: "Kemudahan Publikasi",
-    detail: "",
-    image: Product,
-    link: "www.google.com",
-    titleLink: "Selengkapnya",
-  },
-  {
-    title: "Kemudahan Publikasi",
-    detail: "",
-    image: Product,
-    link: "www.google.com",
+    title: "Maintenance",
+    detail:
+      "Pastikan sistem digital Anda tetap optimal dan up-to-date. Kami menawarkan layanan maintenance jika Anda butuh melakukan pembaruan terhadap sistem digital yang telah Anda bangun.",
+    image: ProductWebApp,
     titleLink: "Selengkapnya",
   },
 ];
 ---
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("#product button.read-more").forEach((el) => {
+      el.addEventListener("click", () => {
+        el.parentElement
+          ?.querySelector(".card-detail")
+          ?.classList.remove("line-clamp-4");
+      });
+    });
+
+    document
+      .querySelector("#product .card-container")
+      ?.addEventListener("scroll", (e) => {
+        const targetEl = e.target as HTMLDivElement;
+
+        const isLeftEnd = targetEl.scrollLeft === 0;
+
+        if (isLeftEnd) {
+          document
+            .querySelector("#product button.prev")
+            ?.classList.add("opacity-0");
+        } else {
+          document
+            .querySelector("#product button.prev")
+            ?.classList.remove("opacity-0");
+        }
+
+        const isRightEnd =
+          targetEl.scrollWidth - targetEl.scrollLeft === targetEl.clientWidth;
+
+        if (isRightEnd) {
+          document
+            .querySelector("#product button.next")
+            ?.classList.add("opacity-0");
+        } else {
+          document
+            .querySelector("#product button.next")
+            ?.classList.remove("opacity-0");
+        }
+      });
+  });
+</script>
+
+<script is:inline>
+  function productScrollRight() {
+    document.querySelector("#product .card-container")?.scrollBy(360, 0);
+  }
+
+  function productScrollLeft() {
+    document.querySelector("#product .card-container")?.scrollBy(-360, 0);
+  }
+</script>
 
 <section
   class="px-5 py-10 min-h-screen flex items-center lg:py-20 lg:px-20 max-w-screen-xl xl:px-0 xl:mx-auto"
@@ -114,31 +165,64 @@ const services = [
       </div>
     </div>
 
-    <div
-      class="card-container flex flex-col gap-10 md:grid md:grid-cols-2 lg:flex lg:flex-row lg:overflow-auto lg:-mx-4 lg:w-1/2 p-4"
-    >
-      {
-        services.map((data) => {
-          return (
-            <CardComponent
-              title={data.title}
-              detail={data.detail}
-              image={data.image}
-              link={data.link}
-              customClass="min-w-[60%]"
-              titleLink={data.titleLink}
-              titleSize="lg"
-            />
-          );
-        })
-      }
+    <div class="relative lg:w-1/2 flex">
+      <button
+        class="prev hidden absolute opacity-0 transition-opacity -left-5 top-1/2 -translate-y-1/2 bg-primary text-white h-12 w-12 lg:flex items-center justify-center rounded-full z-20"
+        onclick="productScrollLeft()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="1em"
+          height="1em"
+          viewBox="0 0 24 24"
+          class="w-8 h-8"
+          ><path
+            fill="currentColor"
+            d="m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z"></path></svg
+        >
+      </button>
+
+      <div
+        class="card-container flex flex-col gap-10 md:grid md:grid-cols-2 lg:flex lg:flex-row lg:overflow-auto lg:-mx-4 px-5 scroll-px-5 -mx-5 py-5 -my-5 scroll-smooth snap-x"
+      >
+        {
+          services.map((data) => {
+            return (
+              <CardComponent
+                title={data.title}
+                detail={data.detail}
+                image={data.image}
+                link={data.link}
+                customClass="min-w-[60%] snap-start snap-normal"
+                titleLink={data.titleLink}
+                titleSize="xl"
+              />
+            );
+          })
+        }
+      </div>
+
+      <button
+        class="next hidden absolute transition-opacity -right-10 top-1/2 -translate-y-1/2 bg-primary text-white h-12 w-12 lg:flex items-center justify-center rounded-full z-20"
+        onclick="productScrollRight()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="1em"
+          height="1em"
+          viewBox="0 0 24 24"
+          class="w-8 h-8"
+          ><path fill="currentColor" d="M12.6 12L8 7.4L9.4 6l6 6l-6 6L8 16.6z"
+          ></path></svg
+        >
+      </button>
     </div>
   </div>
 </section>
 
 <style>
   .product {
-    animation: productMove 2s ease-in;
+    /* animation: productMove 2s ease-in; */
   }
 
   .card-container::-webkit-scrollbar {
@@ -148,8 +232,8 @@ const services = [
   .card-container {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none;
-    position: relative;
-    animation: cardMove 2s ease-in;
+    /* position: relative; */
+    /* animation: cardMove 2s ease-in; */
   }
 
   @keyframes productMove {

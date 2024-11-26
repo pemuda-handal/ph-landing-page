@@ -1,16 +1,16 @@
 ---
 import { Image } from "astro:assets";
-import Project11 from "@assets/images/project-1-1.png";
 
 interface Props {
   title: string;
   detail: string;
   image: ImageMetadata;
   customClass: string;
-  link: string;
+  link?: string;
   titleLink?: string;
-  titleSize?: "md" | "lg";
+  titleSize?: "md" | "lg" | "xl";
 }
+
 const {
   title,
   detail,
@@ -20,6 +20,12 @@ const {
   titleLink,
   titleSize = "md",
 } = Astro.props;
+
+const titleSizes = {
+  md: "",
+  lg: "text-lg lg:text-xl",
+  xl: "text-lg lg:text-3xl",
+};
 ---
 
 <div
@@ -34,11 +40,11 @@ const {
   <div class="flex items-start flex-col p-5 gap-5 justify-between flex-1">
     <div class="flex flex-col gap-5 flex-1">
       <p
-        class=`font-bold line-clamp-3 text-left ${(titleSize || 'md') === 'lg' ? 'text-lg lg:text-3xl' : ''}`
+        class=`font-bold line-clamp-3 text-left ${titleSizes[(titleSize || 'md')]}`
       >
         {title || "Lorem ipsum dolor sit."}
       </p>
-      <p class="text-[#6D6D6D] line-clamp-4 text-left">
+      <p class="text-[#6D6D6D] line-clamp-4 text-left card-detail">
         {
           detail ||
             "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus optio iure veritatis mollitia, maiores nobis quam reprehenderit, natus commodi, ad delectus dignissimos numquam eius suscipit cupiditate repudiandae est reiciendis rerum."
@@ -46,7 +52,9 @@ const {
       </p>
     </div>
 
-    <button class="font-bold text-primary flex flex-row items-center gap-5">
+    <button
+      class="font-bold text-primary flex flex-row items-center gap-5 read-more"
+    >
       <a href={link} target="_blank">{titleLink || "Baca Selengkapnya"}</a>
       <svg
         xmlns="http://www.w3.org/2000/svg"

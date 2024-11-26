@@ -1,45 +1,83 @@
 ---
 import Card from "../components/CardComponent.astro";
-import Project11 from "@assets/images/project-1-1.png";
+import ProjectGTA from "@assets/images/projects/project-gta.png";
+import ProjectSigmund from "@assets/images/projects/project-sigmund.png";
+import ProjectPouchpack from "@assets/images/projects/project-pouchpack.png";
+import ProjectABS from "@assets/images/projects/project-abs.png";
+import ProjectJagoTernak from "@assets/images/projects/project-jagoternak.png";
 
 const cardItems = [
   {
-    title: "Studi Kasus 1",
+    title: "GTA V Role Play Server: Five Project Indonesia Landing Page",
     detail:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, obcaecati?",
-    image: Project11,
+      "Kami mengembangkan landing website sebagai sarana promosi dan penyampaian informasi server GTA V Roleplay",
+    image: ProjectGTA,
     link: "https://google.com",
   },
   {
-    title: "Studi Kasus 2",
+    title: "Branding Agency: Sigmund Creatus Landing Page",
     detail:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, obcaecati?Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, obcaecati?Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, obcaecati?Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, obcaecati?",
-    image: Project11,
+      "Klien kami Sigmund Creatus membutuhkan website landing page sebagai sarana promosi dan penyampaian informasi berkaitan dengan jasa mereka dalam membantu branding suatu bisnis.",
+    image: ProjectSigmund,
     link: "https://google.com",
   },
   {
-    title: "Studi Kasus 3",
+    title: "Garment Business: PouchPack Landing Page",
     detail:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, obcaecati?Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, obcaecati?Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, obcaecati?Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, obcaecati?Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, obcaecati?",
-    image: Project11,
+      "Klien kami PouchPack membutuhkan website landing page sebagai sarana promosi dan penyampaian informasi berkaitan dengan penjualan Pouch Custom seperti Packaging, Event, Souvenir, etc.",
+    image: ProjectPouchpack,
+    link: "https://google.com",
+  },
+  {
+    title: "Book Store: Altasha Book Store Inventory App",
+    detail:
+      "Klien kami Altasha merupakan sebuah toko buku online membutuhkan manajemen inventaris untuk pengelolaan buku dan akuntansi penjualan & pembelian buku.",
+    image: ProjectABS,
+    link: "https://google.com",
+  },
+  {
+    title: "Poultry Startup: Jago Ternak Monitoring App",
+    detail:
+      "Klien kami Jago Ternak merupakan startup di industri peternakan yang saat ini fokus dalam mengembangkan industri peternakan ayam kampung. Jago Ternak membutuhkan website landing page sekaligus website manajemen peternakan yang meliputi dashboard, pelaporan, dan laman edukasi bagi mitra Jago Ternak.",
+    image: ProjectJagoTernak,
     link: "https://google.com",
   },
 ];
 ---
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("#portfolio button.read-more").forEach((el) => {
+      el.addEventListener("click", () => {
+        el.parentElement
+          ?.querySelector(".card-detail")
+          ?.classList.remove("line-clamp-4");
+      });
+    });
+  });
+</script>
+
 <section
-  class="flex flex-col gap-10 px-5 py-10 lg:py-20 lg:px-20 max-w-screen-xl xl:px-0 xl:mx-auto"
+  class="flex flex-col gap-10 px-5 py-10 lg:py-20 lg:px-20 max-w-screen-xl xl:px-0 xl:mx-auto overflow-visible"
+  id="portfolio"
 >
-  <h1 class="text-2xl lg:text-4xl xl:text-5xl font-bold">Studi Kasus Kami</h1>
-  <div class="flex flex-col md:grid md:grid-cols-2 lg:flex lg:flex-row gap-10">
+  <h1
+    class="text-2xl px-5 md:px-0 lg:text-4xl xl:text-5xl font-bold max-w-screen-xl"
+  >
+    Studi Kasus Kami
+  </h1>
+
+  <div
+    class="flex overflow-auto px-5 pb-5 -mx-5 md:grid md:grid-cols-2 lg:grid-cols-3 gap-10"
+  >
     {
       cardItems.map((item) => (
         <Card
           title={item.title}
           detail={item.detail}
           image={item.image}
-          link={item.link}
-          customClass="flex-1"
+          customClass="shrink-0 w-80 md:w-auto"
+          titleSize="lg"
         />
       ))
     }
