@@ -1,0 +1,58 @@
+---
+import Footer from "../../components/Footer.astro";
+import CarouselHeroBlog from "../../components/CarouselHeroBlog.svelte";
+import BlogsList from "../../sections/BlogsList.svelte";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import ConnectSection from "../../sections/ConnectSection.astro";
+---
+
+<Layout
+  title="Blog - Pemuda Handal"
+  description="Blog yang berisi artikel-artikel menarik seputar teknologi, programming, dan desain. Dapatkan informasi terbaru seputar dunia teknologi di sini."
+  keywords=""
+  url="https://pemudahandal.com/blog"
+  imageUrl="/images/meta-tags.png"
+>
+  <Header />
+  <div class="relative mb-10 lg:mb-24">
+    <CarouselHeroBlog client:load />
+  </div>
+  <div class="px-5 lg:px-20 pb-20">
+    <BlogsList client:load />
+  </div>
+  <ConnectSection />
+  <Footer />
+</Layout>
+
+<style is:global>
+  .skeleton {
+    background: #eee;
+    position: relative;
+  }
+
+  .skeleton::before {
+    content: "";
+    position: absolute;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.9),
+      transparent
+    );
+    width: 50%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    animation: loading 1s infinite ease-in;
+  }
+
+  @keyframes loading {
+    0% {
+      transform: skewX(-10deg) translateX(-100%);
+    }
+    100% {
+      transform: skewX(-10deg) translateX(200%);
+    }
+  }
+</style>

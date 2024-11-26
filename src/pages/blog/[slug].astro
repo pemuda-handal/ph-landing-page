@@ -1,0 +1,695 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+import AuthorHeader from "../../components/AuthorHeader.astro";
+import { marked } from "marked";
+import { Image } from "astro:assets";
+import HeaderBlog from "../../components/HeaderBlog.astro";
+import ConnectSection from "../../sections/ConnectSection.astro";
+interface Blog {
+  id: number;
+  attributes: {
+    title: string;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    slug: string;
+    locale: string;
+    keywords: string;
+    visited_counter: number;
+    cover: Image;
+    author: {
+      data: {
+        id: number;
+        attributes: {
+          username: string;
+          email: string;
+          provider: string;
+          confirmed: boolean;
+          blocked: boolean;
+          createdAt: string;
+          updatedAt: string;
+          name: string;
+          avatar: Image;
+          headline: string;
+          socials: {
+            [key: string]: string;
+          };
+        };
+      };
+    };
+    blog_categories: {
+      data: {
+        id: number;
+        attributes: {
+          name: string;
+          slug: string;
+          createdAt: string;
+          updatedAt: string;
+          publishedAt: string;
+          locale: string;
+        };
+      }[];
+    };
+    localizations: any[];
+  };
+}
+
+interface Image {
+  data: {
+    id: number;
+    attributes: {
+      name: string;
+      alternativeText: string;
+      caption: any;
+      width: number;
+      height: number;
+      formats: {
+        thumbnail: ImageFormat;
+        large: ImageFormat;
+        small: ImageFormat;
+        medium: ImageFormat;
+      };
+      hash: string;
+      ext: string;
+      mime: string;
+      size: number;
+      url: string;
+      previewUrl: any;
+      provider: string;
+      provider_metadata: any;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
+}
+
+interface ImageFormat {
+  name: string;
+  hash: string;
+  ext: string;
+  mime: string;
+  path: any;
+  width: number;
+  height: number;
+  size: number;
+  sizeInBytes: number;
+  url: string;
+}
+
+export const prerender = false;
+const BASE_API_URL = import.meta.env.PUBLIC_API_URL;
+const API_KEY = import.meta.env.PUBLIC_API_KEY;
+const { slug } = Astro.params;
+
+let blog: Blog;
+let subTitles: string[] = [];
+
+const response = await fetch(`${BASE_API_URL}/api/blogs/${slug}`, {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${API_KEY}`,
+  },
+});
+
+const responseJson = await response.json();
+blog = responseJson.data;
+
+if (!blog) {
+  return new Response(null, {
+    status: 404,
+    statusText: "Not found",
+  });
+}
+
+const regex = /##\s(.*?)\n/g;
+let match;
+while ((match = regex.exec(blog.attributes.content)) !== null) {
+  subTitles.push(match[1]);
+}
+
+const isVisited = Astro.cookies.get("sv");
+const visitedCounter = blog.attributes.visited_counter || 0;
+
+if (!isVisited && visitedCounter < 32767) {
+  const response = await fetch(`${BASE_API_URL}/api/blogs/${blog.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${API_KEY}`,
+    },
+    body: JSON.stringify({
+      data: {
+        visited_counter: visitedCounter + 1,
+      },
+    }),
+  });
+
+  if (response.ok) {
+    Astro.cookies.set("sv", "true");
+  }
+}
+---
+
+<script is:inline define:vars={{ blog }}>
+  console.log(blog);
+  document.addEventListener("DOMContentLoaded", function () {
+    const h2s = document.querySelectorAll("h2");
+    h2s.forEach((h2) => {
+      h2.id = h2.textContent.toLowerCase().replace(/ /g, "-");
+    });
+
+    let lastScrollTop = document.documentElement.scrollTop;
+    window.onscroll = function () {
+      const article = document.querySelector("article");
+      const scroll = document.documentElement.scrollTop;
+      const height = article.clientHeight - window.innerHeight;
+      let scrolled = (scroll / height) * 100;
+      if (scrolled > 100) {
+        scrolled = 100;
+      }
+      document.querySelector(".progress").style.width = scrolled + "%";
+
+      const header = document.querySelector("header");
+      const duplicatedHeader = document.createElement("div");
+      duplicatedHeader.innerHTML = header.innerHTML;
+      duplicatedHeader.querySelector(".logo-wrapper").innerHTML =
+        `<a href="/"><img src="/logo.png" alt="PemudaHandal Logo" class="w-40 h-10 object-cover" /></a>`;
+      duplicatedHeader.classList.add(
+        "fixed-header",
+        "fixed",
+        "top-0",
+        "z-50",
+        "w-full",
+        "animate-fadeIn",
+        "px-5",
+        "py-4",
+        "lg:px-20",
+        "flex",
+        "items-center",
+        "justify-between",
+        "lg:justify-start",
+        "gap-14",
+        "shadow-md",
+        "bg-white",
+        "text-black"
+      );
+
+      if (scroll > lastScrollTop || scroll <= 400) {
+        const fixedHeader = document.querySelector(".fixed-header");
+        if (fixedHeader) {
+          fixedHeader.classList.remove("animate-fadeIn");
+          fixedHeader.classList.add("animate-fadeOut");
+          setTimeout(() => {
+            fixedHeader.remove();
+          }, 300);
+        }
+      } else if (
+        scroll < lastScrollTop &&
+        !document.querySelector(".fixed-header") &&
+        scroll > 400
+      ) {
+        header.insertAdjacentElement("afterend", duplicatedHeader);
+      }
+      lastScrollTop = scroll <= 0 ? 0 : scroll;
+    };
+
+    const copyLinkButton = document.querySelector(".copy-link");
+    copyLinkButton.addEventListener("click", () => {
+      navigator.clipboard.writeText(window.location.href);
+      toast("Link berhasil disalin");
+    });
+
+    const facebookShareButton = document.querySelector(".facebook-share");
+    facebookShareButton.addEventListener("click", () => {
+      const x = screen.width / 2 - 700 / 2;
+      const y = screen.height / 2 - 450 / 2;
+      window.open(
+        `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`,
+        "facebook-share-dialog",
+        `height=485,width=700,left=${x},top=${y}`
+      );
+    });
+
+    const twitterShareButton = document.querySelector(".twitter-share");
+    twitterShareButton.addEventListener("click", () => {
+      const x = screen.width / 2 - 700 / 2;
+      const y = screen.height / 2 - 450 / 2;
+      window.open(
+        `https://twitter.com/intent/tweet?url=${window.location.href}&text=${document.title}`,
+        "twitter-share-dialog",
+        `height=485,width=700,left=${x},top=${y}`
+      );
+    });
+
+    const linkedinShareButton = document.querySelector(".linkedin-share");
+    linkedinShareButton.addEventListener("click", () => {
+      const x = screen.width / 2 - 700 / 2;
+      const y = screen.height / 2 - 450 / 2;
+      window.open(
+        `https://www.linkedin.com/sharing/share-offsite/?url=${window.location.href}`,
+        "linkedin-share-dialog",
+        `height=485,width=700,left=${x},top=${y}`
+      );
+    });
+  });
+
+  const toast = (message) => {
+    const toastEl = document.createElement("div");
+    toastEl.classList.add(
+      "fixed",
+      "top-5",
+      "left-1/2",
+      "-translate-1/2",
+      "bg-white",
+      "p-3",
+      "rounded-md",
+      "shadow-md",
+      "text-sm",
+      "z-50",
+      "max-w-[300px]",
+      "flex",
+      "items-center",
+      "flex-wrap",
+      "gap-5",
+      "animate-fadeIn",
+      "duration-300",
+      "transform",
+      "translate-x-0",
+      "translate-y-0"
+    );
+    toastEl.textContent = message;
+    toastEl.innerHTML += `
+            <button
+                type="button" class="close-toast">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 256 256"
+                    class="h-4 w-4"
+                >
+                    <rect width="256" height="256" fill="none"></rect>
+                    <line
+                        x1="200"
+                        y1="56"
+                        x2="56"
+                        y2="200"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="16"
+                    ></line>
+                    <line
+                        x1="200"
+                        y1="200"
+                        x2="56"
+                        y2="56"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="16"
+                    ></line>
+                </svg>
+            </button>
+                
+        `;
+    document.body.appendChild(toastEl);
+
+    const closeToastButton = toastEl.querySelector(".close-toast");
+    closeToastButton.addEventListener("click", () => {
+      closeToast(toastEl);
+    });
+
+    setTimeout(() => {
+      closeToast(toastEl);
+    }, 3000);
+  };
+
+  const closeToast = (toastEl) => {
+    toastEl.classList.remove("animate-fadeIn");
+    toastEl.classList.add("animate-fadeOut");
+    setTimeout(() => {
+      toastEl.remove();
+    }, 300);
+  };
+</script>
+
+<Layout
+  title={blog.attributes.title + " - PemudaHandal"}
+  description={blog.attributes.content.slice(0, 150).replace(/<[^>]*>/g, "")}
+  keywords={blog.attributes.keywords}
+  url={`https://pemudahandal.com/blog/${slug}`}
+  imageUrl={BASE_API_URL + blog.attributes.cover.data.attributes.url}
+>
+  <div
+    class="progress h-1 bg-gradient-to-r from-primary to-secondary fixed top-0 z-50"
+    style="width: 0%;"
+  >
+  </div>
+  <HeaderBlog />
+  <div
+    class="pb-10 lg:py-20 lg:grid lg:grid-cols-[200px_1fr] lg:gap-10 lg:max-w-[920px] lg:mx-auto"
+  >
+    <aside class="hidden lg:block lg:sticky lg:top-0 lg:h-fit lg:py-5">
+      <div
+        class="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-lg"
+      >
+        Daftar Isi
+      </div>
+      <hr class="border-[#DFE9F9] border-2 my-3 rounded-full" />
+      <ul>
+        {
+          subTitles.map((title) => (
+            <li>
+              <a
+                href={`#${title.toLowerCase().replace(/ /g, "-")}`}
+                class="inline-block py-1 text-[#6D6D6D] text-sm"
+              >
+                {title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </aside>
+    <div>
+      <article class="lg:pt-5">
+        <div class="relative mb-10 h-80 lg:h-[25rem]">
+          <Image
+            class="skeleton object-cover w-full h-full lg:rounded-2xl"
+            src={BASE_API_URL + blog.attributes.cover.data.attributes.url}
+            alt={blog.attributes.cover.data.attributes.alternativeText ||
+              blog.attributes.title}
+            width={1200}
+            height={600}
+            loading="eager"
+          />
+          <div class="bg-black absolute z-10 inset-0 opacity-50 lg:hidden">
+          </div>
+        </div>
+        <div class="px-4 max-w-[680px] mx-auto lg:max-w-full lg:mx-0">
+          <AuthorHeader
+            name={blog.attributes.author.data.attributes.name}
+            photoUrl={BASE_API_URL +
+              blog.attributes.author.data.attributes.avatar.data.attributes.url}
+            date={blog.attributes.publishedAt}
+            estimation={Math.ceil(blog.attributes.content.length / 500)}
+          />
+          <h1>{blog.attributes.title}</h1>
+          <Fragment set:html={marked.parse(blog.attributes.content)} />
+        </div>
+      </article>
+      <div class="px-5 lg:px-0">
+        <div class="flex flex-row gap-2 flex-wrap mt-8">
+          {
+            blog.attributes.blog_categories.data.map((category) => (
+              <span class="text-white bg-slate-500 text-sm px-3 py-1 rounded-full">
+                {category.attributes.name}
+              </span>
+            ))
+          }
+        </div>
+        <hr class="border-[#DFE9F9] border-2 my-10 rounded-full" />
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5"
+        >
+          <div class="flex gap-3 items-center">
+            <Image
+              class="skeleton rounded-full object-cover shadow-xl"
+              src={BASE_API_URL +
+                blog.attributes.author.data.attributes.avatar.data.attributes
+                  .url || "/images/default-avatar.png"}
+              alt={blog.attributes.author.data.attributes.name}
+              width={50}
+              height={50}
+            />
+            <div>
+              <div class="text-black font-medium">
+                {blog.attributes.author.data.attributes.name}
+              </div>
+              <div class="text-[#6D6D6D] text-sm mt-1">
+                {blog.attributes.author.data.attributes.headline}
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="font-medium">Bagikan</div>
+            <div class="flex items-center gap-3 flex-wrap mt-2 text-[#6D6D6D]">
+              <button type="button" class="copy-link">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 256 256"
+                  class="h-6 w-6"
+                  ><rect width="256" height="256" fill="none"></rect><path
+                    d="M141.38,64.68l11-11a46.62,46.62,0,0,1,65.94,0h0a46.62,46.62,0,0,1,0,65.94L193.94,144,183.6,154.34a46.63,46.63,0,0,1-66-.05h0A46.48,46.48,0,0,1,104,120.06"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"></path><path
+                    d="M114.62,191.32l-11,11a46.63,46.63,0,0,1-66-.05h0a46.63,46.63,0,0,1,.06-65.89L72.4,101.66a46.62,46.62,0,0,1,65.94,0h0A46.45,46.45,0,0,1,152,135.94"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"></path></svg
+                >
+              </button>
+              <button type="button" class="facebook-share">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 256 256"
+                  class="h-6 w-6"
+                  ><rect width="256" height="256" fill="none"></rect><circle
+                    cx="128"
+                    cy="128"
+                    r="96"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"></circle><path
+                    d="M168,88H152a24,24,0,0,0-24,24V224"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"></path><line
+                    x1="96"
+                    y1="144"
+                    x2="160"
+                    y2="144"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"></line></svg
+                >
+              </button>
+              <button type="button" class="twitter-share">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 256 256"
+                  class="h-5 w-5"
+                  ><rect width="256" height="256" fill="none"></rect><polygon
+                    points="48 40 96 40 208 216 160 216 48 40"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"></polygon><line
+                    x1="113.88"
+                    y1="143.53"
+                    x2="48"
+                    y2="216"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"></line><line
+                    x1="208"
+                    y1="40"
+                    x2="142.12"
+                    y2="112.47"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"></line></svg
+                >
+              </button>
+              <button type="button" class="linkedin-share">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 256 256"
+                  class="h-6 w-6"
+                  ><rect width="256" height="256" fill="none"></rect><rect
+                    x="32"
+                    y="32"
+                    width="192"
+                    height="192"
+                    rx="8"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"></rect><line
+                    x1="120"
+                    y1="112"
+                    x2="120"
+                    y2="176"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"></line><line
+                    x1="88"
+                    y1="112"
+                    x2="88"
+                    y2="176"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"></line><path
+                    d="M120,140a28,28,0,0,1,56,0v36"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="16"></path><circle cx="88" cy="84" r="12"
+                  ></circle></svg
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="relative overflow-hidden">
+    <div
+      class="absolute -top-6 -right-6 hidden lg:block lg:-top-24 lg:-right-24 w-32 h-32 lg:w-64 lg:h-64 bg-[#FF48D7] rounded-full filter blur-xl opacity-50 animate-blob"
+    >
+    </div>
+    <div
+      class="absolute bottom-1/2 -left-10 hidden lg:block lg:-bottom-24 lg:-left-24 w-32 h-32 lg:w-64 lg:h-64 bg-[#FF48D7] rounded-full filter blur-xl opacity-50 animate-blob2"
+    >
+    </div>
+    <ConnectSection />
+    <Footer />
+  </div>
+
+  <style is:inline>
+    article h1 {
+      font-weight: 700;
+      line-height: 29px;
+      font-size: 24px;
+      margin-bottom: 40px;
+      margin-top: 40px;
+    }
+
+    article h2 {
+      font-weight: 600;
+      line-height: 26px;
+      font-size: 22px;
+      margin-bottom: 20px;
+      margin-top: 30px;
+    }
+
+    article h3 {
+      font-weight: 600;
+      line-height: 24px;
+      font-size: 20px;
+      margin-bottom: 20px;
+      margin-top: 30px;
+    }
+
+    article h4 {
+      font-weight: 600;
+      line-height: 22px;
+      font-size: 16px;
+    }
+
+    article h5 {
+      font-weight: 600;
+      line-height: 20px;
+      font-size: 14px;
+    }
+
+    article h6 {
+      font-weight: 600;
+      line-height: 18px;
+      font-size: 12px;
+    }
+
+    article p {
+      text-align: justify;
+      color: #6d6d6d;
+    }
+
+    article a {
+      color: #2b6cb0;
+      text-decoration: none;
+    }
+
+    .skeleton {
+      background: #eee;
+      position: relative;
+    }
+
+    .skeleton::before {
+      content: "";
+      position: absolute;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.9),
+        transparent
+      );
+      width: 50%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      animation: loading 1s infinite ease-in;
+    }
+
+    @keyframes loading {
+      0% {
+        transform: skewX(-10deg) translateX(-100%);
+      }
+      100% {
+        transform: skewX(-10deg) translateX(200%);
+      }
+    }
+
+    .animate-fadeIn {
+      animation: fadeIn 0.3s;
+    }
+
+    .animate-fadeOut {
+      animation: fadeOut 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+  </style>
+</Layout>

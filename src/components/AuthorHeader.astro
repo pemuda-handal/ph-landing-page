@@ -1,0 +1,34 @@
+---
+import { Image } from "astro:assets";
+
+const { name, photoUrl, date, estimation } = Astro.props;
+const dateObj = new Date(date);
+---
+
+<div class="flex justify-between flex-wrap gap-3">
+    <div class="flex gap-3">
+        <Image
+            class="skeleton rounded-full object-cover shadow-xl"
+            src={photoUrl || "/images/default-avatar.png"}
+            alt={name}
+            width={40}
+            height={40}
+        />
+        <div>
+            <div class="text-[#6D6D6D] text-sm">Ditulis oleh</div>
+            <div class="text-sm text-black font-medium">{name}</div>
+        </div>
+    </div>
+    <div class="text-[#6D6D6D]">
+        <div class="text-sm lg:text-end">
+            Diunggah {
+                new Intl.DateTimeFormat("in-ID", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                }).format(dateObj)
+            }
+        </div>
+        <div class="text-sm lg:text-end">bacaan {estimation} menit</div>
+    </div>
+</div>

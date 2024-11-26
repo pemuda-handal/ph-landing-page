@@ -1,0 +1,22 @@
+---
+
+---
+
+<div
+    class="w-full px-10 py-5 bg-slate-200 flex flex-col border-l-[10px] border-primary mt-10"
+>
+    <h3 class="text-start text-primary">Baca Juga:</h3>
+
+    <ul class="list-inside overflow-auto">
+        {
+            [
+                "asddaajshdjkashdkjashkdjahsdkhaskjdhasjksdhasd asdasdasda",
+                "Judul 2",
+            ].map((title) => (
+                <>
+                    <li class="list-disc text-primary break-all">{title}</li>
+                </>
+            ))
+        }
+    </ul>
+</div>
