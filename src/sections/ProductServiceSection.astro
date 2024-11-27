@@ -167,7 +167,7 @@ const services = [
 
     <div class="relative lg:w-1/2 flex">
       <button
-        class="prev hidden absolute opacity-0 transition-opacity -left-5 top-1/2 -translate-y-1/2 bg-primary text-white h-12 w-12 lg:flex items-center justify-center rounded-full z-20"
+        class="prev hidden absolute opacity-0 transition-opacity -left-10 top-1/2 -translate-y-1/2 bg-primary text-white h-12 w-12 lg:flex items-center justify-center rounded-full z-20"
         onclick="productScrollLeft()"
       >
         <svg
@@ -183,7 +183,7 @@ const services = [
       </button>
 
       <div
-        class="card-container flex flex-col gap-10 md:grid md:grid-cols-2 lg:flex lg:flex-row lg:overflow-auto lg:-mx-4 px-5 scroll-px-5 -mx-5 py-5 -my-5 scroll-smooth snap-x"
+        class="card-container flex flex-col gap-10 md:grid md:grid-cols-2 lg:flex lg:flex-row lg:overflow-auto px-10 scroll-px-5 -mx-10 py-5 -my-5 -mb-10 pb-10 scroll-smooth snap-x"
       >
         {
           services.map((data) => {
@@ -203,7 +203,7 @@ const services = [
       </div>
 
       <button
-        class="next hidden absolute transition-opacity -right-10 top-1/2 -translate-y-1/2 bg-primary text-white h-12 w-12 lg:flex items-center justify-center rounded-full z-20"
+        class="next hidden absolute transition-opacity -right-16 top-1/2 -translate-y-1/2 bg-primary text-white h-12 w-12 lg:flex items-center justify-center rounded-full z-20"
         onclick="productScrollRight()"
       >
         <svg
