@@ -8,7 +8,7 @@ interface Props {
   customClass: string;
   link?: string;
   titleLink?: string;
-  titleSize?: "md" | "lg" | "xl";
+  size?: "md" | "lg" | "xl";
 }
 
 const {
@@ -18,19 +18,23 @@ const {
   customClass,
   link,
   titleLink,
-  titleSize = "md",
+  size = "md",
 } = Astro.props;
 
 const titleSizes = {
   md: "",
-  lg: "text-lg lg:text-xl",
-  xl: "text-lg lg:text-3xl",
+  lg: "text-lg md:text-xl",
+  xl: "text-lg md:text-2xl",
+};
+
+const contentSizes = {
+  md: "text-sm md:text-base",
+  lg: "text-sm md:text-base",
+  xl: "text-sm md:text-base",
 };
 ---
 
-<div
-  class=`flex flex-col rounded-3xl shadow-card gap-5 bg-white ${customClass}`
->
+<div class=`flex flex-col rounded-3xl shadow-card bg-white ${customClass}`>
   <Image
     src={image || "https://picsum.photos/200"}
     alt=""
@@ -39,12 +43,12 @@ const titleSizes = {
 
   <div class="flex items-start flex-col p-5 gap-5 justify-between flex-1">
     <div class="flex flex-col gap-5 flex-1">
-      <p
-        class=`font-bold line-clamp-3 text-left ${titleSizes[(titleSize || 'md')]}`
-      >
+      <p class=`font-bold line-clamp-3 text-left ${titleSizes[(size || 'md')]}`>
         {title || "Lorem ipsum dolor sit."}
       </p>
-      <p class="text-[#6D6D6D] line-clamp-4 text-left card-detail">
+      <p
+        class=`text-[#6D6D6D] line-clamp-4 text-left ${contentSizes[(size || 'md')]} card-detail`
+      >
         {
           detail ||
             "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus optio iure veritatis mollitia, maiores nobis quam reprehenderit, natus commodi, ad delectus dignissimos numquam eius suscipit cupiditate repudiandae est reiciendis rerum."

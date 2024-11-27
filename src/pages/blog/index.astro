@@ -15,13 +15,21 @@ import ConnectSection from "../../sections/ConnectSection.astro";
   imageUrl="/images/meta-tags.png"
 >
   <Header />
-  <div class="relative mb-10 lg:mb-24">
-    <CarouselHeroBlog client:load />
-  </div>
-  <div class="px-5 lg:px-20 pb-20">
-    <BlogsList client:load />
-  </div>
-  <ConnectSection />
+
+  <main>
+    <section
+      class="relative mb-10 lg:mb-24 max-w-screen-xl mx-auto lg:px-10 xl:px-0"
+    >
+      <CarouselHeroBlog client:load />
+    </section>
+
+    <section class="px-5 lg:px-10 xl:px-0 pb-20 max-w-screen-xl mx-auto">
+      <BlogsList client:load />
+    </section>
+
+    <ConnectSection />
+  </main>
+
   <Footer />
 </Layout>
 

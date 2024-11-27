@@ -52,7 +52,7 @@
   });
 </script>
 
-<div class="relative items-center flex flex-col lg:mt-20 lg:px-20">
+<div class="relative items-center flex flex-col lg:mt-20 w-full">
   <div class="w-full overflow-hidden">
     <div
       class="flex flex-row gap-2 items-center h-[600px] lg:h-[400px] relative"

@@ -16,39 +16,63 @@ import Logo from "@assets/images/logo.png";
   }
 </script>
 
-<header
-  class="flex top-0 w-full py-4 px-5 xl:px-28 bg-white items-center justify-between z-20 text-black sticky"
->
-  <a href="/">
-    <img
-      src={Logo.src}
-      alt="PemudaHandal Logo"
-      class="w-40 h-10 object-cover"
-    />
-  </a>
-  <nav class="hidden lg:block">
-    <ul
-      class="flex justify-between text-sm 2xl:text-base text-black font-bold items-center gap-14 xl:gap-20"
-    >
-      <li><a href="#about" class="px-8">Tentang</a></li>
-      <li><a href="#product" class="px-8">Produk</a></li>
-      <li><a href="/blog" class="px-8">Blog</a></li>
-    </ul>
-  </nav>
-  <div class="items-center gap-5 hidden lg:flex lg:flex-row">
-    <LanguageSelector client:load />
-    <Button>Hubungi Kami</Button>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("scroll", () => {
+      const headerEl = document.querySelector("#header");
+      if (window.scrollY > 64) {
+        headerEl?.classList.add("shadow-lg");
+      } else {
+        headerEl?.classList.remove("shadow-lg");
+      }
+    });
+  });
+</script>
+
+<header class="top-0 w-full bg-white z-50 text-black sticky" id="header">
+  <div
+    class="flex items-center justify-between max-w-screen-2xl mx-auto h-16 px-5 2xl:px-0 lg:h-20 lg:px-10"
+  >
+    <a href="/">
+      <img
+        src={Logo.src}
+        alt="PemudaHandal Logo"
+        class="h-16 lg:h-24 w-auto aspect-video object-cover -ms-4 lg:-ms-5"
+      />
+    </a>
+
+    <nav class="hidden lg:block">
+      <ul
+        class="flex justify-between text-sm 2xl:text-base text-black font-bold items-center gap-14 xl:gap-20"
+      >
+        <li><a href="/#about" class="px-8">Tentang</a></li>
+        <li><a href="/#product" class="px-8">Produk</a></li>
+        <li><a href="/blog" class="px-8">Blog</a></li>
+      </ul>
+    </nav>
+
+    <div class="items-center gap-5 hidden lg:flex lg:flex-row">
+      <LanguageSelector client:load />
+      <Button
+        size="sm"
+        href="https://api.whatsapp.com/send/?phone=6285156353319&type=phone_number&app_absent=0"
+        target="_blank"
+      >
+        Hubungi Kami
+      </Button>
+    </div>
+
+    <button class="lg:hidden" onclick="openNavbar()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        class="w-6 h-6 fill-black"
+        ><path d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"></path></svg
+      >
+    </button>
   </div>
-  <button class="lg:hidden" onclick="openNavbar()">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-      class="w-6 h-6 fill-black"
-      ><path d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"></path></svg
-    >
-  </button>
 </header>
 
 <div
@@ -57,7 +81,11 @@ import Logo from "@assets/images/logo.png";
 >
   <div class="flex w-full items-center justify-between">
     <a href="/" class="flex items-center">
-      <img src={Logo.src} alt="logo" class="w-40 h-16 object-cover" />
+      <img
+        src={Logo.src}
+        alt="logo"
+        class="h-16 w-auto aspect-video object-cover -ms-4"
+      />
     </a>
     <button onclick="closeNavbar()">
       <svg
@@ -92,5 +120,10 @@ import Logo from "@assets/images/logo.png";
     </li>
   </ul>
   <LanguageSelector client:load />
-  <Button>Hubungi Kami</Button>
+  <Button
+    href="https://api.whatsapp.com/send/?phone=6285156353319&type=phone_number&app_absent=0"
+    target="_blank"
+  >
+    Hubungi Kami
+  </Button>
 </div>

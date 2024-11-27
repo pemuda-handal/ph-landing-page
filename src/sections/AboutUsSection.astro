@@ -5,21 +5,22 @@ import Rocket from "@assets/images/rocket.svg";
 ---
 
 <section
-  class="flex flex-col lg:pt-32 lg:pb-20 w-screen gap-20 px-5 py-10 lg:py-20 lg:px-20 max-w-screen-xl xl:px-0 xl:mx-auto"
+  class="flex flex-col w-full gap-20 px-5 pb-10 max-w-screen-xl min-h-screen lg:px-10 xl:px-0 xl:mx-auto"
   id="about"
 >
   <div
-    class="flex flex-col lg:flex-row-reverse gap-4 lg:items-center lg:justify-center"
+    class="pt-20 md:pt-24 flex flex-col lg:flex-row-reverse gap-4 lg:items-center lg:justify-center"
   >
     <div class="flex lg:flex-1">
-      <h1
-        class="text-3xl md:text-4xl lg:text-5xl xl:pr-20 lg:leading-[72px] font-bold"
+      <h2
+        class="text-2xl text-center lg:text-left md:text-3xl xl:text-4xl xl:pr-20 xl:leading-snug font-bold"
       >
         Menghemat waktu dengan membuat dunia <span class="text-primary"
           >lebih produktif</span
         >
-      </h1>
+      </h2>
     </div>
+
     <div class="flex lg:flex-1 items-center justify-center">
       <img
         src={AboutImg.src}
@@ -28,27 +29,29 @@ import Rocket from "@assets/images/rocket.svg";
       />
     </div>
   </div>
-  <div class="flex flex-col gap-20 lg:flex-row">
-    <div class="flex lg:flex-1 flex-col gap-2">
+
+  <div class="flex flex-col gap-20 md:flex-row">
+    <div class="flex md:flex-1 flex-col gap-2">
       <div
-        class="flex gap-4 items-center justify-center font-bold lg:text-lg lg:justify-start"
+        class="flex gap-4 items-center justify-center font-bold md:text-lg lg:justify-start"
       >
         <img src={QuestionMark.src} alt="" class="w-6 h-6" />Siapa Kami ?
       </div>
-      <p class="text-center text-sm lg:text-base lg:text-left">
-        Pemuda Handal adalah perusahaan yang bergerak di bidang perangkat lunak
-        sebagai layanan (SaaS). Kami menyediakan berbagai solusi perangkat lunak
-        yang dirancang untuk meningkatkan efisiensi, memperkuat strategi
-        pemasaran, dan mendorong pertumbuhan bisnis.
+      <p class="text-center text-sm md:text-base lg:text-left">
+        Pemuda Handal adalah perusahaan yang bergerak di bidang teknologi
+        digital yang menyediakan berbagai solusi digital untuk meningkatkan
+        efisiensi, memperkuat strategi pemasaran, dan mendorong pertumbuhan
+        bisnis klien kami.
       </p>
     </div>
-    <div class="flex lg:flex-1 flex-col gap-2">
+
+    <div class="flex md:flex-1 flex-col gap-2">
       <div
-        class="flex gap-4 items-center justify-center font-bold lg:text-lg lg:justify-start"
+        class="flex gap-4 items-center justify-center font-bold md:text-lg lg:justify-start"
       >
         <img src={Rocket.src} alt="" class="w-6 h-6" />Visi Kami
       </div>
-      <p class="text-center text-sm lg:text-base lg:text-left">
+      <p class="text-center text-sm md:text-base lg:text-left">
         Menjadi mitra terpercaya dalam transformasi digital yang memberdayakan
         bisnis untuk tumbuh dan berkembang, dengan mengedepankan nilai
         kekeluargaan dan profesionalisme.

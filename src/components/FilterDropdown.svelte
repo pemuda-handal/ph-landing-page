@@ -24,7 +24,7 @@
 </script>
 
 <div
-  class="filter-dropdown relative bg-gradient-to-r from-primary to-secondary rounded-full p-[2px]"
+  class="filter-dropdown relative bg-gradient-to-r from-primary to-secondary rounded-full p-[2px] z-20"
 >
   <button
     class="bg-white md:py-3 md:px-5 w-[52px] h-[52px] md:w-auto md:h-auto rounded-full flex flex-row gap-20 justify-center md:justify-between items-center"
