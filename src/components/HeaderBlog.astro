@@ -1,8 +1,9 @@
 ---
 import Logo from "@assets/images/logo.png";
+import LogoWhite from "@assets/images/logo-white.svg";
 ---
 
-<script is:inline define:vars={{ Logo }}>
+<script is:inline>
   function openNavbar() {
     const menu = document.querySelector("#menu");
     menu?.classList.add("-translate-x-full");
@@ -12,7 +13,9 @@ import Logo from "@assets/images/logo.png";
     const menu = document.querySelector("#menu");
     menu?.classList.remove("-translate-x-full");
   }
+</script>
 
+<script define:vars={{ Logo, LogoWhite }}>
   document.addEventListener("DOMContentLoaded", () => {
     function responsive(device) {
       const header = document.querySelector("header");
@@ -20,11 +23,11 @@ import Logo from "@assets/images/logo.png";
       if (device.matches) {
         header.classList.remove("text-black");
         header.classList.add("text-white");
-        logoWrapper.innerHTML = `<a href="/"><img src="${Logo.src}" alt="PemudaHandal Logo" class="w-40 h-10 object-cover" /></a>`;
+        logoWrapper.innerHTML = `<a href="/"><img src="${LogoWhite.src}" alt="PemudaHandal Logo" class="h-11 w-auto aspect-video object-cover" /></a>`;
       } else {
         header.classList.remove("text-white");
         header.classList.add("text-black");
-        logoWrapper.innerHTML = `<a href="/"><img src="${Logo.src}" alt="PemudaHandal Logo" class="w-40 h-10 object-cover" /></a>`;
+        logoWrapper.innerHTML = `<a href="/"><img src="${Logo.src}" alt="PemudaHandal Logo" class="h-16 lg:h-24 w-auto aspect-video object-cover -ms-4 lg:-ms-5" /></a>`;
       }
     }
 
@@ -38,33 +41,41 @@ import Logo from "@assets/images/logo.png";
   });
 </script>
 
-<header
-  class="flex absolute top-0 w-full py-4 px-5 lg:px-20 bg-transparent items-center justify-between lg:justify-start gap-14 z-50"
->
-  <div class="logo-wrapper"></div>
-  <nav class="hidden lg:block">
-    <ul class="flex text-sm lg:text-base 2xl:text-lg font-bold">
-      <li><a href="/blog" class="px-6">Beranda</a></li>
-    </ul>
-  </nav>
-  <button class="lg:hidden" onclick="openNavbar()">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-      class="w-6 h-6 fill-black"
-      ><path d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"></path></svg
-    >
-  </button>
+<header class="absolute top-0 w-full bg-transparent z-50">
+  <div
+    class="flex items-center justify-between lg:justify-normal max-w-screen-2xl mx-auto h-16 px-5 2xl:px-0 lg:h-20 lg:px-10"
+  >
+    <div class="logo-wrapper"></div>
+    <nav class="hidden lg:block">
+      <ul class="flex font-bold">
+        <li><a href="/blog" class="px-6">Beranda</a></li>
+      </ul>
+    </nav>
+    <button class="lg:hidden" onclick="openNavbar()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        class="w-6 h-6"
+        fill="currentColor"
+        ><path d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"></path></svg
+      >
+    </button>
+  </div>
 </header>
+
 <div
   id="menu"
-  class="fixed z-50 flex flex-col items-center top-0 h-screen left-full transition transform duration-500 bg-white pt-5 pb-20 px-5 lg:hidden w-screen"
+  class="fixed z-50 flex flex-col items-center top-0 h-screen left-full transition transform duration-500 bg-white pb-20 px-5 lg:hidden w-screen"
 >
   <div class="flex w-full items-center justify-between">
     <a href="/">
-      <img src={Logo.src} alt="logo" class="w-40 h-10 object-cover" />
+      <img
+        src={Logo.src}
+        alt="logo"
+        class="h-16 w-auto aspect-video object-cover -ms-4"
+      />
     </a>
     <button onclick="closeNavbar()">
       <svg

@@ -1,11 +1,56 @@
 ---
-import Footer from "../../components/Footer.astro";
+import Logo from "@assets/images/logo.png";
+import HeaderBlog from "src/components/HeaderBlog.astro";
 import CarouselHeroBlog from "../../components/CarouselHeroBlog.svelte";
-import BlogsList from "../../sections/BlogsList.svelte";
+import Footer from "../../components/Footer.astro";
 import Layout from "../../layouts/Layout.astro";
-import Header from "../../components/Header.astro";
+import BlogsList from "../../sections/BlogsList.svelte";
 import ConnectSection from "../../sections/ConnectSection.astro";
 ---
+
+<script define:vars={{ Logo }}>
+  document.addEventListener("DOMContentLoaded", function () {
+    let lastScrollTop = document.documentElement.scrollTop;
+    window.onscroll = function () {
+      const scroll = document.documentElement.scrollTop;
+      const header = document.querySelector("header");
+      const duplicatedHeader = document.createElement("div");
+      duplicatedHeader.innerHTML = header.innerHTML;
+      duplicatedHeader.querySelector(".logo-wrapper").innerHTML =
+        `<a href="/"><img src="${Logo.src}" alt="PemudaHandal Logo" class="h-16 lg:h-24 w-auto aspect-video object-cover -ms-4 lg:-ms-5" /></a>`;
+      duplicatedHeader.classList.add(
+        "fixed-header",
+        "fixed",
+        "top-0",
+        "z-50",
+        "w-full",
+        "animate-fadeIn",
+        "shadow-md",
+        "bg-white",
+        "text-black"
+      );
+
+      const fixedHeader = document.querySelector(".fixed-header");
+
+      if (scroll > lastScrollTop || scroll <= 400) {
+        if (fixedHeader) {
+          fixedHeader.classList.remove("animate-fadeIn");
+          fixedHeader.classList.add("animate-fadeOut");
+          setTimeout(() => {
+            fixedHeader?.remove();
+          }, 300);
+        }
+      } else if (
+        scroll < lastScrollTop &&
+        fixedHeader === null &&
+        scroll > 400
+      ) {
+        header.insertAdjacentElement("afterend", duplicatedHeader);
+      }
+      lastScrollTop = scroll <= 0 ? 0 : scroll;
+    };
+  });
+</script>
 
 <Layout
   title="Blog - Pemuda Handal"
@@ -14,7 +59,7 @@ import ConnectSection from "../../sections/ConnectSection.astro";
   url="https://pemudahandal.com/blog"
   imageUrl="/images/meta-tags.png"
 >
-  <Header />
+  <HeaderBlog />
 
   <main>
     <section
@@ -61,6 +106,32 @@ import ConnectSection from "../../sections/ConnectSection.astro";
     }
     100% {
       transform: skewX(-10deg) translateX(200%);
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s;
+  }
+
+  .animate-fadeOut {
+    animation: fadeOut 0.3s;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
     }
   }
 </style>

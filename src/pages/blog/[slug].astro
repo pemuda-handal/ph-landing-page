@@ -156,7 +156,6 @@ if (!isVisited && visitedCounter < 32767) {
 ---
 
 <script is:inline define:vars={{ blog, Logo }}>
-  console.log(blog);
   document.addEventListener("DOMContentLoaded", function () {
     const h2s = document.querySelectorAll("h2");
     h2s.forEach((h2) => {
@@ -178,7 +177,7 @@ if (!isVisited && visitedCounter < 32767) {
       const duplicatedHeader = document.createElement("div");
       duplicatedHeader.innerHTML = header.innerHTML;
       duplicatedHeader.querySelector(".logo-wrapper").innerHTML =
-        `<a href="/"><img src="${Logo.src}" alt="PemudaHandal Logo" class="w-40 h-10 object-cover" /></a>`;
+        `<a href="/"><img src="${Logo.src}" alt="PemudaHandal Logo" class="h-16 lg:h-24 w-auto aspect-video object-cover -ms-4 lg:-ms-5" /></a>`;
       duplicatedHeader.classList.add(
         "fixed-header",
         "fixed",
@@ -186,31 +185,24 @@ if (!isVisited && visitedCounter < 32767) {
         "z-50",
         "w-full",
         "animate-fadeIn",
-        "px-5",
-        "py-4",
-        "lg:px-20",
-        "flex",
-        "items-center",
-        "justify-between",
-        "lg:justify-start",
-        "gap-14",
         "shadow-md",
         "bg-white",
         "text-black"
       );
 
+      const fixedHeader = document.querySelector(".fixed-header");
+
       if (scroll > lastScrollTop || scroll <= 400) {
-        const fixedHeader = document.querySelector(".fixed-header");
         if (fixedHeader) {
           fixedHeader.classList.remove("animate-fadeIn");
           fixedHeader.classList.add("animate-fadeOut");
           setTimeout(() => {
-            fixedHeader.remove();
+            fixedHeader?.remove();
           }, 300);
         }
       } else if (
         scroll < lastScrollTop &&
-        !document.querySelector(".fixed-header") &&
+        fixedHeader === null &&
         scroll > 400
       ) {
         header.insertAdjacentElement("afterend", duplicatedHeader);
