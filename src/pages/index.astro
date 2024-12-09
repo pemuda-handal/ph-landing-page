@@ -1,19 +1,35 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import ClientListComponent from "../components/ClientListComponent.astro";
-import HeroSection from "../sections/HeroSection.astro";
-import AboutUsSection from "../sections/AboutUsSection.astro";
-import PortofolioSection from "../sections/PortofolioSection.astro";
-import ProductServiceSection from "../sections/ProductServiceSection.astro";
-import TestimoniSection from "../sections/TestimoniSection.astro";
-import ConnectSection from "../sections/ConnectSection.astro";
+import Footer from "@components/Footer.astro";
+import Header from "@components/Header.astro";
+import Layout from "@layouts/Layout.astro";
+// import ClientListComponent from "@components/ClientListComponent.astro";
+import AboutUsSection from "@sections/AboutUsSection.astro";
+import HeroSection from "@sections/HeroSection.astro";
+import PortofolioSection from "@sections/PortofolioSection.astro";
+import ProductServiceSection from "@sections/ProductServiceSection.astro";
+// import TestimoniSection from "@sections/TestimoniSection.astro";
+import ConnectSection from "@sections/ConnectSection.astro";
+import { useTranslations } from "astro-nanointl";
+
+const locale = Astro.currentLocale || "id";
+const { translations } = await import(`../locales/${locale}/pages/index.ts`);
+
+const t = useTranslations(
+  {
+    title: "Beranda - Pemuda Handal",
+    description:
+      "Pemuda Handal adalah perusahaan yang bergerak di bidang teknologi digital yang menyediakan berbagai solusi digital untuk meningkatkan efisiensi, memperkuat strategi pemasaran, dan mendorong pertumbuhan bisnis klien kami.",
+  },
+  {
+    data: translations,
+    locale,
+  }
+);
 ---
 
 <Layout
-  title="Home - PemudaHandal"
-  description="Blog yang berisi artikel-artikel menarik seputar teknologi, programming, dan desain. Dapatkan informasi terbaru seputar dunia teknologi di sini."
+  title={t.title}
+  description={t.description}
   keywords="blog, artikel, teknologi, programming, desain, informasi, vinterovr, vintero vr, vintero, vr, vintero virtual reality, virtual reality, vr, vintero vr blog, vintero vr artikel, vintero vr teknologi, vintero vr programming, vintero vr desain, vintero vr informasi"
   url="https://vinterovr.com/blog"
   imageUrl="/images/meta-tags.png"

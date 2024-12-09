@@ -1,6 +1,24 @@
 ---
-import Button from "../components/ButtonComponent.astro";
 import HeroImage from "@assets/images/hero-img.png";
+import { useTranslations } from "astro-nanointl";
+import Button from "../components/ButtonComponent.astro";
+
+const locale = Astro.currentLocale || "id";
+const { translations } = await import(
+  `../locales/${locale}/sections/HeroSection.ts`
+);
+
+const t = useTranslations(
+  {
+    h1: 'Jelajahi <span class="text-primary">Masa Depan</span> Digital <br /> dengan <span class="text-primary">Pemuda Handal</span>',
+    p: "Mitra Teknologi Profesional Terbaik dan Terpercaya untuk Transformasi Digital Anda",
+    cta: "Lihat Portofolio",
+  },
+  {
+    data: translations,
+    locale: locale,
+  }
+);
 ---
 
 <section
@@ -13,16 +31,10 @@ import HeroImage from "@assets/images/hero-img.png";
       <div class="flex flex-col gap-5">
         <h1
           class="font-bold text-2xl md:leading-snug xl:leading-snug md:text-3xl xl:text-5xl md:w-full"
-        >
-          Jelajahi <span class="text-primary"> Masa Depan </span>Digital
-          <br />
-          dengan <span class="text-primary">Pemuda Handal</span>
-        </h1>
+          set:html={t.h1}
+        />
 
-        <p class="text-quartenary xl:text-lg">
-          Mitra Teknologi Profesional Terbaik dan Terpercaya untuk Transformasi
-          Digital Anda
-        </p>
+        <p class="text-quartenary xl:text-lg" set:html={t.p} />
       </div>
 
       <Button customClass="w-full justify-center md:w-auto" href="#portfolio">
@@ -36,7 +48,7 @@ import HeroImage from "@assets/images/hero-img.png";
             d="M8 13h8v-2H8zm0 3h8v-2H8zm0 3h5v-2H8zm-2 3q-.825 0-1.412-.587T4 20V4q0-.825.588-1.412T6 2h8l6 6v12q0 .825-.587 1.413T18 22zm7-13h5l-5-5z"
           ></path></svg
         >
-        Lihat Portofolio
+        {t.cta}
       </Button>
     </div>
 

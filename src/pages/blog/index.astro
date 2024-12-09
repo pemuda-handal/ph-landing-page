@@ -1,14 +1,37 @@
 ---
 import Logo from "@assets/images/logo.png";
-import HeaderBlog from "src/components/HeaderBlog.astro";
-import CarouselHeroBlog from "../../components/CarouselHeroBlog.svelte";
-import Footer from "../../components/Footer.astro";
-import Layout from "../../layouts/Layout.astro";
-import BlogsList from "../../sections/BlogsList.svelte";
-import ConnectSection from "../../sections/ConnectSection.astro";
+import CarouselHeroBlog from "@components/CarouselHeroBlog.svelte";
+import Footer from "@components/Footer.astro";
+import HeaderBlog from "@components/HeaderBlog.astro";
+import Layout from "@layouts/Layout.astro";
+import BlogsList from "@sections/BlogsList.svelte";
+import ConnectSection from "@sections/ConnectSection.astro";
+import { useTranslations } from "astro-nanointl";
+
+const locale = Astro.currentLocale || "id";
+const { translations } = await import(
+  `../../locales/${locale}/pages/blog/index.ts`
+);
+
+const t = useTranslations(
+  {
+    title: "Blog - Pemuda Handal",
+    description:
+      "Blog yang berisi artikel-artikel menarik seputar teknologi, programming, dan desain. Dapatkan informasi terbaru seputar dunia teknologi di sini.",
+  },
+  {
+    data: translations,
+    locale,
+  }
+);
+
+const blogUrl =
+  locale === "id"
+    ? "https://pemudahandal.com/blog"
+    : `https://pemudahandal.com/${locale}/blog`;
 ---
 
-<script define:vars={{ Logo }}>
+<script is:inline define:vars={{ Logo }}>
   document.addEventListener("DOMContentLoaded", function () {
     let lastScrollTop = document.documentElement.scrollTop;
     window.onscroll = function () {
@@ -53,10 +76,10 @@ import ConnectSection from "../../sections/ConnectSection.astro";
 </script>
 
 <Layout
-  title="Blog - Pemuda Handal"
-  description="Blog yang berisi artikel-artikel menarik seputar teknologi, programming, dan desain. Dapatkan informasi terbaru seputar dunia teknologi di sini."
+  title={t.title}
+  description={t.description}
   keywords=""
-  url="https://pemudahandal.com/blog"
+  url={blogUrl}
   imageUrl="/images/meta-tags.png"
 >
   <HeaderBlog />
@@ -65,11 +88,11 @@ import ConnectSection from "../../sections/ConnectSection.astro";
     <section
       class="relative mb-10 lg:mb-24 max-w-screen-xl mx-auto lg:px-10 xl:px-0"
     >
-      <CarouselHeroBlog client:load />
+      <CarouselHeroBlog pageLocale={locale} client:load />
     </section>
 
     <section class="px-5 lg:px-10 xl:px-0 pb-20 max-w-screen-xl mx-auto">
-      <BlogsList client:load />
+      <BlogsList pageLocale={locale} client:load />
     </section>
 
     <ConnectSection />

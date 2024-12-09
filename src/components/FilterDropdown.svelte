@@ -1,10 +1,36 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { useTranslations } from "astro-nanointl";
 
   export let filters: { name: string; value: string }[] = [];
   export let selectedFilter: string = "";
   export let isDropdownOpen = false;
   export let onFilterChange: (value: string) => void;
+  export let pageLocale: "id" | "en" = "id";
+
+  let t = useTranslations(
+    {
+      sort: "Urutkan",
+    },
+    {
+      data: {},
+      locale: pageLocale,
+    },
+  );
+
+  import(`../locales/${pageLocale}/components/FilterDropdown.ts`).then(
+    ({ translations }) => {
+      t = useTranslations(
+        {
+          sort: "Urutkan",
+        },
+        {
+          data: translations,
+          locale: pageLocale,
+        },
+      );
+    },
+  );
 
   function toggleFilter() {
     isDropdownOpen = !isDropdownOpen;
@@ -156,7 +182,9 @@
       <div
         class="py-4 px-5 flex flex-row justify-between border-b-2 border-[#99999] font-medium bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text"
       >
-        Urutkan <button
+        {t.sort}
+        <button
+          aria-label="sort"
           on:click={() => {
             isDropdownOpen = false;
           }}

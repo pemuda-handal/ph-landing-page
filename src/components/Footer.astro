@@ -1,5 +1,74 @@
 ---
 import LogoWhite from "@assets/images/logo-white.svg";
+import { useTranslations } from "astro-nanointl";
+
+const pageLocale = Astro.currentLocale || "id";
+const { translations } = await import(
+  `../locales/${pageLocale}/components/Footer.ts`
+);
+
+const t = useTranslations(
+  {
+    about: "Tentang",
+    aboutUs: "Tentang Kami",
+    press: "Press",
+    resources: "Resources",
+    blog: "Blog",
+    support: "Bantuan",
+    products: "Produk",
+    contact: "Kontak",
+  },
+  {
+    data: translations,
+    locale: pageLocale,
+  }
+);
+
+const menuGroups: {
+  label: string;
+  menuList: {
+    label: string;
+    href: string;
+    isExternal?: boolean;
+  }[];
+}[] = [
+  {
+    label: t.about,
+    menuList: [
+      {
+        label: t.aboutUs,
+        href: `/${pageLocale === "id" ? "" : pageLocale}#about`,
+      },
+      {
+        label: t.press,
+        href: `/${pageLocale === "id" ? "" : pageLocale}#press`,
+      },
+    ],
+  },
+  {
+    label: t.resources,
+    menuList: [
+      {
+        label: t.blog,
+        href: `/${pageLocale === "id" ? "" : pageLocale + "/"}blog`,
+      },
+      {
+        label: t.support,
+        href: `/${pageLocale === "id" ? "" : pageLocale}#support`,
+      },
+    ],
+  },
+  {
+    label: t.products,
+    menuList: [
+      {
+        label: "Vintero VR",
+        href: "https://vinterovr.com/",
+        isExternal: true,
+      },
+    ],
+  },
+];
 ---
 
 <footer class="bg-primary">
@@ -24,26 +93,30 @@ import LogoWhite from "@assets/images/logo-white.svg";
           </div>
         </div>
       </div>
-      <div class="flex flex-col gap-2 xl:gap-4">
-        <h3 class="font-bold">About</h3>
-        <ul class="flex flex-col gap-2 xl:gap-4 text-sm">
-          <li><a href="/#about">About Us</a></li>
-          <li><a href="/#press">Press</a></li>
-        </ul>
-      </div>
-      <div class="flex flex-col gap-2 xl:gap-4">
-        <h3 class="font-bold">Resources</h3>
-        <ul class="flex flex-col gap-2 xl:gap-4 text-sm">
-          <li><a href="/blog">Blog</a></li>
-          <li><a href="/#support">Support</a></li>
-        </ul>
-      </div>
-      <div class="flex flex-col gap-2 xl:gap-4">
-        <h3 class="font-bold">Products</h3>
-        <a href="https://vinterovr.com/" target="_blank">Vintero VR</a>
-      </div>
+
+      {
+        menuGroups.map((group) => (
+          <div class="flex flex-col gap-2 xl:gap-4">
+            <h3 class="font-bold">{group.label}</h3>
+
+            <ul class="flex flex-col gap-2 xl:gap-4 text-sm">
+              {group.menuList.map((menu) => (
+                <li>
+                  <a
+                    href={menu.href}
+                    target={menu.isExternal ? "_blank" : undefined}
+                  >
+                    {menu.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+
       <div class="flex flex-col gap-2 xl:gap-4 items-center lg:items-start">
-        <h3 class="font-bold font-inter">Contact</h3>
+        <h3 class="font-bold font-inter">{t.contact}</h3>
         <div class="flex flex-row gap-4 text-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -60,6 +133,7 @@ import LogoWhite from "@assets/images/logo-white.svg";
             target="_blank">085156353319</a
           >
         </div>
+
         <div class="flex flex-row gap-4 text-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -75,6 +149,7 @@ import LogoWhite from "@assets/images/logo-white.svg";
             >pemudahandal.id@gmail.com</a
           >
         </div>
+
         <div class="flex flex-row gap-4 text-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"

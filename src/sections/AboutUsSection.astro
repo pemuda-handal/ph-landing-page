@@ -2,6 +2,28 @@
 import AboutImg from "@assets/images/about-img.png";
 import QuestionMark from "@assets/images/question-mark.svg";
 import Rocket from "@assets/images/rocket.svg";
+import { useTranslations } from "astro-nanointl";
+
+const locale = Astro.currentLocale || "id";
+const { translations } = await import(
+  `../locales/${locale}/sections/AboutUsSection.ts`
+);
+
+const t = useTranslations(
+  {
+    h2: 'Menghemat waktu dengan membuat dunia <span class="text-primary">lebih produktif</span>',
+    aboutTitle: "Siapa Kami ?",
+    aboutContent:
+      "Pemuda Handal adalah perusahaan yang bergerak di bidang teknologi digital yang menyediakan berbagai solusi digital untuk meningkatkan efisiensi, memperkuat strategi pemasaran, dan mendorong pertumbuhan bisnis klien kami.",
+    visionTitle: "Visi Kami",
+    visionContent:
+      "Menjadi mitra terpercaya dalam transformasi digital yang memberdayakan bisnis untuk tumbuh dan berkembang, dengan mengedepankan nilai kekeluargaan dan profesionalisme.",
+  },
+  {
+    data: translations,
+    locale,
+  }
+);
 ---
 
 <section
@@ -14,11 +36,8 @@ import Rocket from "@assets/images/rocket.svg";
     <div class="flex lg:flex-1">
       <h2
         class="text-2xl text-center lg:text-left md:text-3xl xl:text-4xl xl:pr-20 xl:leading-snug font-bold"
-      >
-        Menghemat waktu dengan membuat dunia <span class="text-primary"
-          >lebih produktif</span
-        >
-      </h2>
+        set:html={t.h2}
+      />
     </div>
 
     <div class="flex lg:flex-1 items-center justify-center">
@@ -35,27 +54,28 @@ import Rocket from "@assets/images/rocket.svg";
       <div
         class="flex gap-4 items-center justify-center font-bold md:text-lg lg:justify-start"
       >
-        <img src={QuestionMark.src} alt="" class="w-6 h-6" />Siapa Kami ?
+        <img src={QuestionMark.src} alt="" class="w-6 h-6" />
+        <span set:html={t.aboutTitle} />
       </div>
-      <p class="text-center text-sm md:text-base lg:text-left">
-        Pemuda Handal adalah perusahaan yang bergerak di bidang teknologi
-        digital yang menyediakan berbagai solusi digital untuk meningkatkan
-        efisiensi, memperkuat strategi pemasaran, dan mendorong pertumbuhan
-        bisnis klien kami.
-      </p>
+
+      <p
+        class="text-center text-sm md:text-base lg:text-left"
+        set:html={t.aboutContent}
+      />
     </div>
 
     <div class="flex md:flex-1 flex-col gap-2">
       <div
         class="flex gap-4 items-center justify-center font-bold md:text-lg lg:justify-start"
       >
-        <img src={Rocket.src} alt="" class="w-6 h-6" />Visi Kami
+        <img src={Rocket.src} alt="" class="w-6 h-6" />
+        <span set:html={t.visionTitle} />
       </div>
-      <p class="text-center text-sm md:text-base lg:text-left">
-        Menjadi mitra terpercaya dalam transformasi digital yang memberdayakan
-        bisnis untuk tumbuh dan berkembang, dengan mengedepankan nilai
-        kekeluargaan dan profesionalisme.
-      </p>
+
+      <p
+        class="text-center text-sm md:text-base lg:text-left"
+        set:html={t.visionContent}
+      />
     </div>
   </div>
 </section>

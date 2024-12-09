@@ -1,6 +1,32 @@
 ---
 import Logo from "@assets/images/logo.png";
 import LogoWhite from "@assets/images/logo-white.svg";
+import LanguageSelector from "./LanguageSelector.svelte";
+import { useTranslations } from "astro-nanointl";
+
+const pageLocale = Astro.currentLocale || "id";
+const { translations } = await import(
+  `../locales/${pageLocale}/components/HeaderBlog.ts`
+);
+
+const t = useTranslations(
+  {
+    linkHomeLabel: "Beranda",
+  },
+  {
+    data: translations,
+    locale: pageLocale,
+  }
+);
+
+const homeHref = `/${pageLocale === "id" ? "" : pageLocale}`;
+
+const menuList = [
+  {
+    label: t.linkHomeLabel,
+    href: `/${pageLocale === "id" ? "" : pageLocale + "/"}blog`,
+  },
+];
 ---
 
 <script is:inline>
@@ -15,7 +41,7 @@ import LogoWhite from "@assets/images/logo-white.svg";
   }
 </script>
 
-<script define:vars={{ Logo, LogoWhite }}>
+<script is:inline define:vars={{ Logo, LogoWhite, homeHref }}>
   document.addEventListener("DOMContentLoaded", () => {
     function responsive(device) {
       const header = document.querySelector("header");
@@ -23,11 +49,11 @@ import LogoWhite from "@assets/images/logo-white.svg";
       if (device.matches) {
         header.classList.remove("text-black");
         header.classList.add("text-white");
-        logoWrapper.innerHTML = `<a href="/"><img src="${LogoWhite.src}" alt="PemudaHandal Logo" class="h-11 w-auto aspect-video object-cover" /></a>`;
+        logoWrapper.innerHTML = `<a href="${homeHref}"><img src="${LogoWhite.src}" alt="PemudaHandal Logo" class="h-11 w-auto aspect-video object-cover" /></a>`;
       } else {
         header.classList.remove("text-white");
         header.classList.add("text-black");
-        logoWrapper.innerHTML = `<a href="/"><img src="${Logo.src}" alt="PemudaHandal Logo" class="h-16 lg:h-24 w-auto aspect-video object-cover -ms-4 lg:-ms-5" /></a>`;
+        logoWrapper.innerHTML = `<a href="${homeHref}"><img src="${Logo.src}" alt="PemudaHandal Logo" class="h-16 lg:h-24 w-auto aspect-video object-cover -ms-4 lg:-ms-5" /></a>`;
       }
     }
 
@@ -43,14 +69,28 @@ import LogoWhite from "@assets/images/logo-white.svg";
 
 <header class="absolute top-0 w-full bg-transparent z-50">
   <div
-    class="flex items-center justify-between lg:justify-normal max-w-screen-2xl mx-auto h-16 px-5 2xl:px-0 lg:h-20 lg:px-10"
+    class="flex items-center justify-between max-w-screen-2xl mx-auto h-16 px-5 2xl:px-0 lg:h-20 lg:px-10"
   >
     <div class="logo-wrapper"></div>
-    <nav class="hidden lg:block">
+
+    <nav class="hidden lg:block flex-1">
       <ul class="flex font-bold">
-        <li><a href="/blog" class="px-6">Beranda</a></li>
+        {
+          menuList.map((menu) => (
+            <li>
+              <a href={menu.href} class="px-6">
+                {menu.label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </nav>
+
+    <div class="hidden lg:block">
+      <LanguageSelector pageLocale={pageLocale} client:load />
+    </div>
+
     <button class="lg:hidden" onclick="openNavbar()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -90,9 +130,18 @@ import LogoWhite from "@assets/images/logo-white.svg";
       >
     </button>
   </div>
-  <ul class="text-center text-black w-full mt-10">
-    <li>
-      <a href="/blog" class="inline-block py-5 w-full font-bold">Beranda</a>
-    </li>
+
+  <ul class="text-center text-black w-full mt-10 flex-1">
+    {
+      menuList.map((menu) => (
+        <li>
+          <a href={menu.href} class="inline-block py-5 w-full font-bold">
+            {menu.label}
+          </a>
+        </li>
+      ))
+    }
   </ul>
+
+  <LanguageSelector pageLocale={pageLocale} client:load />
 </div>

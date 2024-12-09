@@ -1,5 +1,33 @@
 <script lang="ts">
+  import { useTranslations } from "astro-nanointl";
+
   export let searchQuery: string = "";
+  export let pageLocale: "id" | "en" = "id";
+
+  let t = useTranslations(
+    {
+      placeholder: "Masukkan kata kunci pencarian...",
+    },
+    {
+      data: {},
+      locale: pageLocale,
+    },
+  );
+
+  import(`../locales/${pageLocale}/components/SearchBar.ts`).then(
+    ({ translations }) => {
+      t = useTranslations(
+        {
+          placeholder: "Masukkan kata kunci pencarian...",
+        },
+        {
+          data: translations,
+          locale: pageLocale,
+        },
+      );
+    },
+  );
+
   let input: HTMLInputElement;
 </script>
 
@@ -8,7 +36,7 @@
     <input
       class="py-3 px-5 pr-10 rounded-full w-full outline-none"
       type="search"
-      placeholder="Masukkan kata kunci pencarian..."
+      placeholder={t.placeholder}
       bind:this={input}
       bind:value={searchQuery}
     />
@@ -17,6 +45,7 @@
     type="button"
     class="absolute top-1/2 -translate-y-[50%] right-5 cursor-default"
     on:click={() => input.focus()}
+    aria-label="search"
   >
     <svg
       width="24"

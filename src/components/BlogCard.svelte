@@ -93,14 +93,50 @@
 </script>
 
 <script lang="ts">
+  import { toJsLocale } from "@utils/astroToJsLocale";
+
+  import { useTranslations } from "astro-nanointl";
+
   const BASE_API_URL = import.meta.env.PUBLIC_API_URL;
   export let blog: Blog | null = null;
+  export let pageLocale: "id" | "en" = "id";
+
+  let blogUrl =
+    pageLocale === "id"
+      ? `/blog/${blog?.attributes.slug}`
+      : `/${pageLocale}/blog/${blog?.attributes.slug}`;
+
+  let t = useTranslations(
+    {
+      readMore: "Baca Selengkapnya",
+      by: "Oleh",
+    },
+    {
+      data: {},
+      locale: pageLocale,
+    },
+  );
+
+  import(`../locales/${pageLocale}/components/BlogCard.ts`).then(
+    ({ translations }) => {
+      t = useTranslations(
+        {
+          readMore: "Baca Selengkapnya",
+          by: "Oleh",
+        },
+        {
+          data: translations,
+          locale: pageLocale,
+        },
+      );
+    },
+  );
 </script>
 
 {#if blog}
   <div class="flex flex-col p-4 shadow-md rounded-lg gap-3">
     <div>
-      <a href="/blog/{blog.attributes.slug}">
+      <a href={blogUrl}>
         <img
           class="skeleton rounded-lg object-cover aspect-video"
           src={BASE_API_URL + blog.attributes.cover.data.attributes.url}
@@ -111,14 +147,18 @@
     </div>
     <div class="flex flex-row justify-between text-sm mt-2 flex-wrap">
       <div class="text-[#999999]">
-        Oleh {blog.attributes.author.data.attributes.name}
+        {t.by}
+        {blog.attributes.author.data.attributes.name}
       </div>
       <div class="text-[#999999]">
-        {new Date(blog.attributes.publishedAt).toLocaleDateString("in-ID", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        })}
+        {new Date(blog.attributes.publishedAt).toLocaleDateString(
+          toJsLocale(pageLocale),
+          {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          },
+        )}
       </div>
     </div>
     <div class="flex flex-col gap-3">
@@ -143,9 +183,10 @@
         {/each}
       </div>
       <a
-        href="/blog/{blog.attributes.slug}"
+        href={blogUrl}
         class="flex flex-row justify-between text-primary font-semibold text-sm mt-2"
-        >Baca Selengkapnya <span
+        >{t.readMore}
+        <span
           ><svg
             width="20"
             height="20"

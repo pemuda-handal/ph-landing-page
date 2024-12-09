@@ -10,75 +10,108 @@ import ProductUIDesign from "@assets/images/products/product-ui-ux-design.png";
 import ProductVintero from "@assets/images/products/product-vintero.png";
 import ProductWebApp from "@assets/images/products/product-web-app.png";
 import Restaurant from "@assets/images/restaurant.svg";
-import CardComponent from "../components/CardComponent.astro";
-import ChipComponent from "../components/ChipComponent.astro";
+import CardComponent from "@components/CardComponent.astro";
+import ChipComponent from "@components/ChipComponent.astro";
+import { useTranslations } from "astro-nanointl";
 
-const chipComponents = [
+const locale = Astro.currentLocale || "id";
+const { translations } = await import(
+  `../locales/${locale}/sections/ProductServiceSection.ts`
+);
+
+const t = useTranslations(
   {
-    name: "perumahan",
+    h2: 'Menghemat waktu dengan membuat dunia <span class="text-primary">lebih produktif</span>',
+    cardMore: "Baca Selengkapnya",
+  },
+  {
+    data: translations,
+    locale,
+  }
+);
+
+const chipComponents: {
+  name: { [key: string]: string };
+  svg: ImageMetadata;
+}[] = [
+  {
+    name: { id: "Perumahan", en: "Residence" },
     svg: Perumahan,
   },
   {
-    name: "hotel",
+    name: { id: "Hotel", en: "Hotel" },
     svg: Hotel,
   },
   {
-    name: "Restauran",
+    name: { id: "Restoran", en: "Restaurant" },
     svg: Restaurant,
   },
   {
-    name: "Museum",
+    name: { id: "Museum", en: "Museum" },
     svg: Museum,
   },
   {
-    name: "Destinasi Wisata",
+    name: { id: "Destinasi Wisata", en: "Tourist Destination" },
     svg: Destination,
   },
 ];
 
-const services = [
+const services: {
+  title: { [key: string]: string };
+  detail: { [key: string]: string };
+  image: ImageMetadata;
+  titleLink?: { [key: string]: string };
+  link?: string;
+}[] = [
   {
-    title: "VinteroVR",
-    detail:
-      "Solusi terbaik untuk pemasaran properti Anda. Dengan teknologi 360° Virtual Tour, Anda dapat menampilkan properti Anda dengan lebih interaktif dan menarik.",
+    title: { id: "VinteroVR", en: "VinteroVR" },
+    detail: {
+      id: "Solusi terbaik untuk pemasaran properti Anda. Dengan teknologi 360° Virtual Tour, Anda dapat menampilkan properti Anda dengan lebih interaktif dan menarik.",
+      en: "The best solution for your property marketing. With 360° Virtual Tour technology, you can showcase your property in a more interactive and attractive way.",
+    },
     image: ProductVintero,
     link: "https://vinterovr.com",
-    titleLink: "Selengkapnya",
+    titleLink: { id: "Pelajari", en: "Learn More" },
   },
   {
-    title: "Landing Page",
-    detail:
-      "Maksimalkan kesan pertama bisnis Anda melalui landing page yang dirancang secara profesional, dengan fokus pada estetika dan efektivitas konversi.",
+    title: { id: "Landing Page", en: "Landing Page" },
+    detail: {
+      id: "Maksimalkan kesan pertama bisnis Anda melalui landing page yang dirancang secara profesional, dengan fokus pada estetika dan efektivitas konversi.",
+      en: "Maximize the first impression of your business through a professionally designed landing page, focusing on aesthetics and conversion effectiveness.",
+    },
     image: ProductLanding,
-    titleLink: "Selengkapnya",
   },
   {
-    title: "Aplikasi Web",
-    detail:
-      "Kami menciptakan aplikasi web yang tidak hanya terlihat menarik, tetapi juga mampu mendukung kebutuhan operasional dan efisiensi bisnis Anda.",
+    title: { id: "Aplikasi Web", en: "Web Application" },
+    detail: {
+      id: "Kami menciptakan aplikasi web yang tidak hanya terlihat menarik, tetapi juga mampu mendukung kebutuhan operasional dan efisiensi bisnis Anda.",
+      en: "We create web applications that not only look good, but are also able to support the operational needs and efficiency of your business.",
+    },
     image: ProductWebApp,
-    titleLink: "Selengkapnya",
   },
   {
-    title: "Aplikasi Mobile",
-    detail:
-      "Raih audiens yang lebih luas melalui aplikasi mobile yang dirancang khusus untuk perangkat Android dan iOS, dengan performa tinggi dan fitur yang relevan",
+    title: { id: "Aplikasi Mobile", en: "Mobile Application" },
+    detail: {
+      id: "Raih audiens yang lebih luas melalui aplikasi mobile yang dirancang khusus untuk perangkat Android dan iOS, dengan performa tinggi dan fitur yang relevan",
+      en: "Reach a wider audience through mobile apps designed specifically for Android and iOS devices, with high performance and relevant features.",
+    },
     image: ProductMobileApp,
-    titleLink: "Selengkapnya",
   },
   {
-    title: "UI/UX Design",
-    detail:
-      "Tingkatkan pengalaman pengguna dengan desain UI/UX yang elegan, intuitif, dan berorientasi pada kenyamanan pelanggan",
+    title: { id: "UI/UX Design", en: "UI/UX Design" },
+    detail: {
+      id: "Tingkatkan pengalaman pengguna dengan desain UI/UX yang elegan, intuitif, dan berorientasi pada kenyamanan pelanggan",
+      en: "Enhance user experience with elegant, intuitive, and customer-centric UI/UX design",
+    },
     image: ProductUIDesign,
-    titleLink: "Selengkapnya",
   },
   {
-    title: "Maintenance",
-    detail:
-      "Pastikan sistem digital Anda tetap optimal dan up-to-date. Kami menawarkan layanan maintenance jika Anda butuh melakukan pembaruan terhadap sistem digital yang telah Anda bangun.",
+    title: { id: "Maintenance", en: "Maintenance" },
+    detail: {
+      id: "Pastikan sistem digital Anda tetap optimal dan up-to-date. Kami menawarkan layanan maintenance jika Anda butuh melakukan pembaruan terhadap sistem digital yang telah Anda bangun.",
+      en: "Keep your digital system optimized and up-to-date. We offer maintenance services if you need to update the digital system you have built.",
+    },
     image: ProductWebApp,
-    titleLink: "Selengkapnya",
   },
 ];
 ---
@@ -149,16 +182,19 @@ const services = [
       <img src={Meteor.src} alt="meteor" class="flex-1" />
 
       <div class="flex flex-col items-center gap-5 lg:gap-10 lg:items-start">
-        <h2 class="font-bold text-2xl md:text-3xl xl:text-4xl xl:leading-snug">
-          Solusi Bisnis <br class="hidden lg:block" />Terbaik
-        </h2>
+        <h2
+          class="font-bold text-2xl md:text-3xl xl:text-4xl xl:leading-snug"
+          set:html={t.h2}
+        />
 
         <div
           class="flex flex-row gap-x-2 gap-y-4 flex-wrap justify-center lg:justify-start"
         >
           {
             chipComponents.map((data) => {
-              return <ChipComponent name={data.name} emote={data.svg} />;
+              return (
+                <ChipComponent name={data.name[locale]} emote={data.svg} />
+              );
             })
           }
         </div>
@@ -189,12 +225,12 @@ const services = [
           services.map((data) => {
             return (
               <CardComponent
-                title={data.title}
-                detail={data.detail}
+                title={data.title[locale]}
+                detail={data.detail[locale]}
                 image={data.image}
                 link={data.link}
                 customClass="min-w-[60%] snap-start snap-normal"
-                titleLink={data.titleLink}
+                titleLink={data.titleLink ? data.titleLink[locale] : t.cardMore}
                 size="xl"
               />
             );

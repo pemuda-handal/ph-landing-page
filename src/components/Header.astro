@@ -2,6 +2,42 @@
 import Button from "./ButtonComponent.astro";
 import LanguageSelector from "./LanguageSelector.svelte";
 import Logo from "@assets/images/logo.png";
+import { useTranslations } from "astro-nanointl";
+
+const pageLocale = Astro.currentLocale || "id";
+const { translations } = await import(
+  `../locales/${pageLocale}/components/Header.ts`
+);
+
+const t = useTranslations(
+  {
+    linkAboutLabel: "Tentang",
+    linkProductLabel: "Produk",
+    linkBlogLabel: "Blog",
+    contactUsLabel: "Hubungi Kami",
+  },
+  {
+    data: translations,
+    locale: pageLocale,
+  }
+);
+
+const homeHref = `/${pageLocale === "id" ? "" : pageLocale}`;
+
+const menuList = [
+  {
+    label: t.linkAboutLabel,
+    href: `/${pageLocale === "id" ? "" : pageLocale}#about`,
+  },
+  {
+    label: t.linkProductLabel,
+    href: `/${pageLocale === "id" ? "" : pageLocale}#product`,
+  },
+  {
+    label: t.linkBlogLabel,
+    href: `/${pageLocale === "id" ? "" : pageLocale + "/"}blog`,
+  },
+];
 ---
 
 <script is:inline>
@@ -33,7 +69,7 @@ import Logo from "@assets/images/logo.png";
   <div
     class="flex items-center justify-between max-w-screen-2xl mx-auto h-16 px-5 2xl:px-0 lg:h-20 lg:px-10"
   >
-    <a href="/">
+    <a href={homeHref}>
       <img
         src={Logo.src}
         alt="PemudaHandal Logo"
@@ -45,20 +81,27 @@ import Logo from "@assets/images/logo.png";
       <ul
         class="flex justify-between text-sm 2xl:text-base text-black font-bold items-center gap-14 xl:gap-20"
       >
-        <li><a href="/#about" class="px-8">Tentang</a></li>
-        <li><a href="/#product" class="px-8">Produk</a></li>
-        <li><a href="/blog" class="px-8">Blog</a></li>
+        {
+          menuList.map((menu) => (
+            <li>
+              <a href={menu.href} class="px-8">
+                {menu.label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </nav>
 
     <div class="items-center gap-5 hidden lg:flex lg:flex-row">
-      <LanguageSelector client:load />
+      <LanguageSelector pageLocale={pageLocale} client:load />
+
       <Button
         size="sm"
         href="https://api.whatsapp.com/send/?phone=6285156353319&type=phone_number&app_absent=0"
         target="_blank"
       >
-        Hubungi Kami
+        {t.contactUsLabel}
       </Button>
     </div>
 
@@ -80,7 +123,7 @@ import Logo from "@assets/images/logo.png";
   class="fixed z-50 flex flex-col items-center justify-between top-0 h-screen left-full transition transform duration-500 bg-white pb-20 px-5 lg:hidden w-screen"
 >
   <div class="flex w-full items-center justify-between">
-    <a href="/" class="flex items-center">
+    <a href={homeHref} class="flex items-center">
       <img
         src={Logo.src}
         alt="logo"
@@ -101,29 +144,27 @@ import Logo from "@assets/images/logo.png";
     </button>
   </div>
   <ul class="text-center text-black w-full font-bold flex flex-col gap-16">
-    <li>
-      <a href="/#about" class="inline-block py-5 w-full" onclick="closeNavbar()"
-        >Tentang</a
-      >
-    </li>
-    <li>
-      <a
-        href="/#product"
-        class="inline-block py-5 w-full"
-        onclick="closeNavbar()">Produk</a
-      >
-    </li>
-    <li>
-      <a href="/blog" class="inline-block py-5 w-full" onclick="closeNavbar()"
-        >Blog</a
-      >
-    </li>
+    {
+      menuList.map((menu) => (
+        <li>
+          <a
+            href={menu.href}
+            class="inline-block py-5 w-full"
+            onclick="closeNavbar()"
+          >
+            {menu.label}
+          </a>
+        </li>
+      ))
+    }
   </ul>
-  <LanguageSelector client:load />
+
+  <LanguageSelector pageLocale={pageLocale} client:load />
+
   <Button
     href="https://api.whatsapp.com/send/?phone=6285156353319&type=phone_number&app_absent=0"
     target="_blank"
   >
-    Hubungi Kami
+    {t.contactUsLabel}
   </Button>
 </div>

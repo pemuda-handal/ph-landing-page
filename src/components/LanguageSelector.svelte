@@ -1,9 +1,13 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
 
-  let currentLang = "id";
+  export let pageLocale: "id" | "en" = "id";
+
+  let currentLang: "id" | "en" = "id";
+  let isInitialized = false;
   let isOpen = false;
-  onMount(() => {
+
+  onMount(async () => {
     const lang = localStorage.getItem("lang");
 
     if (lang == null) {
@@ -13,7 +17,21 @@
     } else if (lang == "en") {
       currentLang = "en";
     }
+    await tick();
+    isInitialized = true;
   });
+
+  $: if (isInitialized && currentLang) {
+    const { pathname } = new URL(window.location.href);
+
+    if (currentLang !== pageLocale) {
+      if (currentLang === "id") {
+        window.location.href = `${pathname.replace(/\/en/g, "")}` || "/";
+      } else {
+        window.location.href = `/${currentLang}${pathname === "/" ? "" : pathname}`;
+      }
+    }
+  }
 
   function toggleLanguageSelectorPopUp() {
     isOpen = !isOpen;
@@ -23,12 +41,12 @@
     isOpen = false;
   }
 
-  function changeLanguage(lang: string) {
-    if (lang == "id") {
+  function changeLanguage(lang: "id" | "en") {
+    if (lang === "id") {
       currentLang = "id";
       localStorage.setItem("lang", "id");
       closeLanguageSelector();
-    } else if (lang == "en") {
+    } else if (lang === "en") {
       currentLang = "en";
       localStorage.setItem("lang", "en");
       closeLanguageSelector();

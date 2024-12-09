@@ -5,40 +5,87 @@ import ProjectSigmund from "@assets/images/projects/project-sigmund.png";
 import ProjectPouchpack from "@assets/images/projects/project-pouchpack.png";
 import ProjectABS from "@assets/images/projects/project-abs.png";
 import ProjectJagoTernak from "@assets/images/projects/project-jagoternak.png";
+import { useTranslations } from "astro-nanointl";
 
-const cardItems = [
+const locale = Astro.currentLocale || "id";
+const { translations } = await import(
+  `../locales/${locale}/sections/PortfolioSection.ts`
+);
+
+const t = useTranslations(
   {
-    title: "GTA V Role Play Server: Five Project Indonesia Landing Page",
-    detail:
-      "Kami mengembangkan landing website sebagai sarana promosi dan penyampaian informasi server GTA V Roleplay",
+    h2: "Portofolio Kami",
+    cardMore: "Selengkapnya",
+  },
+  {
+    data: translations,
+    locale,
+  }
+);
+
+const cardItems: {
+  title: { [index: string]: string };
+  detail: { [index: string]: string };
+  image: ImageMetadata;
+  link?: string;
+}[] = [
+  {
+    title: {
+      id: "GTA V Role Play Server: Five Project Indonesia Landing Page",
+      en: "GTA V Role Play Server: Five Project Indonesia Landing Page",
+    },
+    detail: {
+      id: "Kami mengembangkan landing website sebagai sarana promosi dan penyampaian informasi server GTA V Roleplay.",
+      en: "We developed a landing website as a means of promotion and delivery of GTA V Roleplay server information.",
+    },
     image: ProjectGTA,
     link: "https://google.com",
   },
   {
-    title: "Branding Agency: Sigmund Creatus Landing Page",
-    detail:
-      "Klien kami Sigmund Creatus membutuhkan website landing page sebagai sarana promosi dan penyampaian informasi berkaitan dengan jasa mereka dalam membantu branding suatu bisnis.",
+    title: {
+      id: "Branding Agency: Sigmund Creatus Landing Page",
+      en: "Branding Agency: Sigmund Creatus Landing Page",
+    },
+    detail: {
+      id: "Klien kami Sigmund Creatus membutuhkan website landing page sebagai sarana promosi dan penyampaian informasi berkaitan dengan jasa mereka dalam membantu branding suatu bisnis.",
+      en: "Our client Sigmund Creatus needs a landing page website as a means of promotion and delivery of information related to their services in helping branding a business.",
+    },
     image: ProjectSigmund,
     link: "https://google.com",
   },
   {
-    title: "Garment Business: PouchPack Landing Page",
-    detail:
-      "Klien kami PouchPack membutuhkan website landing page sebagai sarana promosi dan penyampaian informasi berkaitan dengan penjualan Pouch Custom seperti Packaging, Event, Souvenir, etc.",
+    title: {
+      id: "Garment Business: PouchPack Landing Page",
+      en: "Garment Business: PouchPack Landing Page",
+    },
+    detail: {
+      id: "Klien kami PouchPack membutuhkan website landing page sebagai sarana promosi dan penyampaian informasi berkaitan dengan penjualan Pouch Custom seperti Packaging, Event, Souvenir, etc.",
+      en: "Our client PouchPack needs a landing page website as a means of promotion and delivery of information related to the sale of Custom Pouches such as Packaging, Events, Souvenirs, etc.",
+    },
     image: ProjectPouchpack,
     link: "https://google.com",
   },
   {
-    title: "Book Store: Altasha Book Store Inventory App",
-    detail:
-      "Klien kami Altasha merupakan sebuah toko buku online membutuhkan manajemen inventaris untuk pengelolaan buku dan akuntansi penjualan & pembelian buku.",
+    title: {
+      id: "Book Store: Altasha Book Store Inventory App",
+      en: "Book Store: Altasha Book Store Inventory App",
+    },
+    detail: {
+      id: "Klien kami Altasha merupakan sebuah toko buku online membutuhkan manajemen inventaris untuk pengelolaan buku dan akuntansi penjualan & pembelian buku.",
+      en: "Our client Altasha is an online bookstore needs inventory management for book management and book sales & purchase accounting.",
+    },
     image: ProjectABS,
     link: "https://google.com",
   },
   {
-    title: "Poultry Startup: Jago Ternak Monitoring App",
-    detail:
-      "Klien kami Jago Ternak merupakan startup di industri peternakan yang saat ini fokus dalam mengembangkan industri peternakan ayam kampung. Jago Ternak membutuhkan website landing page sekaligus website manajemen peternakan yang meliputi dashboard, pelaporan, dan laman edukasi bagi mitra Jago Ternak.",
+    title: {
+      id: "Poultry Startup: Jago Ternak Monitoring App",
+      en: "Poultry Startup: Jago Ternak Monitoring App",
+    },
+    detail: {
+      id: "Klien kami Jago Ternak merupakan startup di industri peternakan yang saat ini fokus dalam mengembangkan industri peternakan ayam kampung. Jago Ternak membutuhkan website landing page sekaligus website manajemen peternakan yang meliputi dashboard, pelaporan, dan laman edukasi bagi mitra Jago Ternak.",
+      en: "Our client Jago Ternak is a startup in the livestock industry that currently focuses on developing the native chicken farming industry. Jago Ternak needs a landing page website as well as a farm management website that includes dashboards, reporting, and educational pages for Jago Ternak partners.",
+    },
     image: ProjectJagoTernak,
     link: "https://google.com",
   },
@@ -64,7 +111,7 @@ const cardItems = [
   <h2
     class="text-2xl pt-20 md:pt-24 md:text-3xl xl:text-4xl font-bold max-w-screen-xl"
   >
-    Portfolio Kami
+    {t.h2}
   </h2>
 
   <div
@@ -73,11 +120,12 @@ const cardItems = [
     {
       cardItems.map((item) => (
         <Card
-          title={item.title}
-          detail={item.detail}
+          title={item.title[locale]}
+          detail={item.detail[locale]}
           image={item.image}
           customClass="shrink-0 w-80 md:w-auto"
           size="lg"
+          titleLink={t.cardMore}
         />
       ))
     }

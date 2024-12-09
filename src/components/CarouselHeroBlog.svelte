@@ -1,11 +1,41 @@
 <script lang="ts">
   import { onDestroy, onMount } from "svelte";
   import type { Blog } from "./BlogCard.svelte";
+  import { useTranslations } from "astro-nanointl";
+  import { toJsLocale } from "@utils/astroToJsLocale";
+
+  export let pageLocale: "id" | "en" = "id";
 
   let currentSlideIndex = 0;
   let blogs: Blog[] = [];
   let slideInterval: number;
   let isLoading = false;
+
+  let t = useTranslations(
+    {
+      readMore: "Baca Selengkapnya",
+      by: "Oleh",
+    },
+    {
+      data: {},
+      locale: pageLocale,
+    },
+  );
+
+  import(`../locales/${pageLocale}/components/CarouselHeroBlog.ts`).then(
+    ({ translations }) => {
+      t = useTranslations(
+        {
+          readMore: "Baca Selengkapnya",
+          by: "Oleh",
+        },
+        {
+          data: translations,
+          locale: pageLocale,
+        },
+      );
+    },
+  );
 
   const BASE_API_URL = import.meta.env.PUBLIC_API_URL;
 
@@ -96,6 +126,10 @@
         </div>
       {:else}
         {#each blogs as blog, index}
+          {@const blogUrl =
+            pageLocale === "id"
+              ? `/blog/${blog.attributes.slug}`
+              : `/${pageLocale}/blog/${blog.attributes.slug}`}
           <div
             class="absolute w-full h-full transition-transform duration-500"
             style="transform: translateX(-{currentSlideIndex *
@@ -109,7 +143,7 @@
               >
                 <a
                   class="inline-block w-full h-full lg:h-[350px]"
-                  href="/blog/{blog.attributes.slug}"
+                  href={blogUrl}
                 >
                   <img
                     class="skeleton object-cover w-full h-full lg:rounded-2xl"
@@ -128,7 +162,7 @@
                 class="absolute lg:static bottom-[10%] px-5 z-30 w-full lg:rounded-2xl lg:w-full lg:h-[350px] lg:flex lg:flex-col lg:justify-between"
               >
                 <div>
-                  <a href="/blog/{blog.attributes.slug}">
+                  <a href={blogUrl}>
                     <h3
                       class="text-white font-semibold text-2xl mb-5 lg:text-[#1E1E1E]"
                       title={blog.attributes.title}
@@ -142,9 +176,10 @@
                     </p>
                   </a>
                   <a
-                    href="/blog/{blog.attributes.slug}"
+                    href={blogUrl}
                     class="flex flex-row justify-between text-white lg:bg-gradient-to-br lg:from-primary lg:to-secondary lg:text-transparent lg:bg-clip-text font-medium w-full mt-1 text-sm"
-                    >Baca Selengkapnya <span
+                    >{t.readMore}
+                    <span
                       ><svg
                         width="20"
                         height="20"
@@ -163,7 +198,7 @@
                 <div class="hidden lg:block text-sm">
                   <p>
                     {new Date(blog.attributes.publishedAt).toLocaleDateString(
-                      "in-ID",
+                      toJsLocale(pageLocale),
                       {
                         year: "numeric",
                         month: "short",
@@ -172,7 +207,8 @@
                     )}
                   </p>
                   <p>
-                    Oleh: <span class="font-bold"
+                    {t.by}:
+                    <span class="font-bold"
                       >{blog.attributes.author.data.attributes.name}</span
                     >
                   </p>
@@ -197,6 +233,7 @@
       <div class="flex flex-row justify-between px-5">
         {#each blogs as blog, index}
           <button
+            aria-label="page-{index}"
             type="button"
             on:click={() => changeSelectedItem(index)}
             class="p-1 rounded-full w-[30%] shadow-lg {currentSlideIndex ===

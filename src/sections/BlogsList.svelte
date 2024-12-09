@@ -3,6 +3,9 @@
   import FilterDropdown from "../components/FilterDropdown.svelte";
   import SearchBar from "../components/SearchBar.svelte";
   import { onDestroy, onMount } from "svelte";
+  import { useTranslations } from "astro-nanointl";
+
+  export let pageLocale: "id" | "en" = "id";
 
   const BASE_API_URL = import.meta.env.PUBLIC_API_URL;
 
@@ -14,25 +17,57 @@
   let searchQuery = "";
   let isSortDropdownOpen = false;
   let selectedSort = "publishedAt:desc";
-  let sorts = [
-    {
-      name: "Terbaru",
-      value: "publishedAt:desc",
-    },
-    {
-      name: "Terlama",
-      value: "publishedAt:asc",
-    },
-    {
-      name: "A ke Z",
-      value: "title:asc",
-    },
-    {
-      name: "Z ke A",
-      value: "title:desc",
-    },
-  ];
+  let sorts: { name: string; value: string }[] = [];
   let searchDebounce: number;
+
+  let t = useTranslations(
+    {
+      newest: "Terbaru",
+      oldest: "Terlama",
+      aToZ: "A ke Z",
+      zToA: "Z ke A",
+    },
+    {
+      data: {},
+      locale: pageLocale,
+    },
+  );
+
+  import(`../locales/${pageLocale}/sections/BlogsList.ts`).then(
+    ({ translations }) => {
+      t = useTranslations(
+        {
+          newest: "Terbaru",
+          oldest: "Terlama",
+          aToZ: "A ke Z",
+          zToA: "Z ke A",
+        },
+        {
+          data: translations,
+          locale: pageLocale,
+        },
+      );
+
+      sorts = [
+        {
+          name: t.newest,
+          value: "publishedAt:desc",
+        },
+        {
+          name: t.oldest,
+          value: "publishedAt:asc",
+        },
+        {
+          name: t.aToZ,
+          value: "title:asc",
+        },
+        {
+          name: t.zToA,
+          value: "title:desc",
+        },
+      ];
+    },
+  );
 
   const fetchBlogs = async (
     { page = 1, searchQuery = "", sort = "publishedAt:desc" } = {},
@@ -103,23 +138,24 @@
 
 <div class="flex flex-row justify-between items-end gap-5">
   <div class="w-full lg:w-1/2">
-    <SearchBar bind:searchQuery />
+    <SearchBar bind:searchQuery {pageLocale} />
   </div>
   <FilterDropdown
     filters={sorts}
     bind:isDropdownOpen={isSortDropdownOpen}
     onFilterChange={onSortChange}
     selectedFilter={selectedSort}
+    {pageLocale}
   />
 </div>
 <div class="mt-5 grid md:grid-cols-2 xl:grid-cols-3 gap-5">
   {#if isLoading}
     {#each Array(6) as _}
-      <BlogCard />
+      <BlogCard {pageLocale} />
     {/each}
   {:else}
     {#each blogs as blog}
-      <BlogCard {blog}></BlogCard>
+      <BlogCard {blog} {pageLocale}></BlogCard>
     {/each}
   {/if}
 </div>

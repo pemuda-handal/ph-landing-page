@@ -1,12 +1,13 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import Footer from "../../components/Footer.astro";
-import AuthorHeader from "../../components/AuthorHeader.astro";
-import { marked } from "marked";
-import { Image } from "astro:assets";
-import HeaderBlog from "../../components/HeaderBlog.astro";
-import ConnectSection from "../../sections/ConnectSection.astro";
 import Logo from "@assets/images/logo.png";
+import AuthorHeader from "@components/AuthorHeader.astro";
+import Footer from "@components/Footer.astro";
+import HeaderBlog from "@components/HeaderBlog.astro";
+import Layout from "@layouts/Layout.astro";
+import ConnectSection from "@sections/ConnectSection.astro";
+import { Image } from "astro:assets";
+import { marked } from "marked";
+import { useTranslations } from "astro-nanointl";
 
 interface Blog {
   id: number;
@@ -101,6 +102,23 @@ interface ImageFormat {
 }
 
 export const prerender = false;
+
+const locale = Astro.currentLocale || "id";
+const { translations } = await import(
+  `../../locales/${locale}/pages/blog/[slug].ts`
+);
+
+const t = useTranslations(
+  {
+    tableOfContents: "Daftar Isi",
+    share: "Bagikan",
+  },
+  {
+    data: translations,
+    locale,
+  }
+);
+
 const BASE_API_URL = import.meta.env.PUBLIC_API_URL;
 const API_KEY = import.meta.env.PUBLIC_API_KEY;
 const { slug } = Astro.params;
@@ -153,6 +171,11 @@ if (!isVisited && visitedCounter < 32767) {
     Astro.cookies.set("sv", "true");
   }
 }
+
+const blogUrl =
+  locale === "id"
+    ? `https://pemudahandal.com/blog/${slug}`
+    : `https://pemudahandal.com/${locale}/blog/${slug}`;
 ---
 
 <script is:inline define:vars={{ blog, Logo }}>
@@ -335,7 +358,7 @@ if (!isVisited && visitedCounter < 32767) {
   title={blog.attributes.title + " - PemudaHandal"}
   description={blog.attributes.content.slice(0, 150).replace(/<[^>]*>/g, "")}
   keywords={blog.attributes.keywords}
-  url={`https://pemudahandal.com/blog/${slug}`}
+  url={blogUrl}
   imageUrl={BASE_API_URL + blog.attributes.cover.data.attributes.url}
 >
   <div
@@ -343,7 +366,9 @@ if (!isVisited && visitedCounter < 32767) {
     style="width: 0%;"
   >
   </div>
+
   <HeaderBlog />
+
   <div
     class="pb-10 lg:py-20 lg:grid lg:grid-cols-[200px_1fr] lg:gap-10 lg:max-w-[920px] lg:mx-auto"
   >
@@ -351,7 +376,7 @@ if (!isVisited && visitedCounter < 32767) {
       <div
         class="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-lg"
       >
-        Daftar Isi
+        {t.tableOfContents}
       </div>
       <hr class="border-[#DFE9F9] border-2 my-3 rounded-full" />
       <ul>
@@ -430,7 +455,7 @@ if (!isVisited && visitedCounter < 32767) {
             </div>
           </div>
           <div>
-            <div class="font-medium">Bagikan</div>
+            <div class="font-medium">{t.share}</div>
             <div class="flex items-center gap-3 flex-wrap mt-2 text-[#6D6D6D]">
               <button type="button" class="copy-link">
                 <svg
