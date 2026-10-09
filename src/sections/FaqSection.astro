@@ -1,5 +1,5 @@
 ---
-import TestimonialsCarousel from "@components/TestimonialsCarousel.svelte";
+import FaqSectionComponent from "@components/FaqSection.svelte";
 
 interface Props {
   locale?: string;
@@ -8,26 +8,26 @@ interface Props {
 const { locale = Astro.currentLocale || "id" } = Astro.props;
 const currentLocale = (locale || "id") as "id" | "en";
 
-const badge = currentLocale === "en" ? "CLIENT SATISFACTION" : "TESTIMONI & KEPUASAN KLIEN";
+const badge = currentLocale === "en" ? "FAQ & GUIDANCE" : "FAQ & PANDUAN LENGKAP";
 const h2 = currentLocale === "en"
-  ? 'What Our Clients <span class="text-primary">Say About Us</span>'
-  : 'Apa Kata Klien <span class="text-primary">Tentang Pemuda Handal?</span>';
+  ? 'Frequently Asked <span class="text-primary">Questions</span>'
+  : 'Pertanyaan yang Sering <span class="text-primary">Diajukan</span>';
 const subtitle = currentLocale === "en"
-  ? "Real stories and feedback from partners who transformed their digital presence with us."
-  : "Kisah nyata dan kepuasan bisnis yang telah bermitra membangun solusi teknologi bersama kami.";
+  ? "Find fast, clear answers regarding our project workflows, pricing models, warranties, and VR capabilities."
+  : "Temukan jawaban jelas dan transparan seputar alur kerja, estimasi biaya, garansi, dan teknologi kami.";
 ---
 
 <section
   class="relative py-20 lg:py-28 max-w-screen-xl mx-auto px-5 lg:px-10 xl:px-8"
-  id="testimonials"
+  id="faq"
 >
   <!-- Background Glow -->
-  <div class="pointer-events-none absolute left-1/2 -translate-x-1/2 top-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+  <div class="pointer-events-none absolute right-10 top-1/2 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
 
   <!-- Header -->
   <div class="flex flex-col items-center text-center gap-4 mb-12 max-w-3xl mx-auto">
     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
-      <span>⭐</span>
+      <span>❓</span>
       <span>{badge}</span>
     </div>
 
@@ -41,6 +41,6 @@ const subtitle = currentLocale === "en"
     </p>
   </div>
 
-  <!-- Interactive Testimonials Carousel -->
-  <TestimonialsCarousel client:visible locale={currentLocale} />
+  <!-- Interactive FAQ Accordion -->
+  <FaqSectionComponent client:visible locale={currentLocale} />
 </section>

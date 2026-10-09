@@ -2,22 +2,27 @@
 import AboutImg from "@assets/images/about-img.png";
 import QuestionMark from "@assets/images/question-mark.svg";
 import Rocket from "@assets/images/rocket.svg";
+import WorkflowRoadmap from "@components/WorkflowRoadmap.svelte";
 import { useTranslations } from "astro-nanointl";
 
-const locale = Astro.currentLocale || "id";
+const locale = (Astro.currentLocale || "id") as "id" | "en";
 const { translations } = await import(
   `../locales/${locale}/sections/AboutUsSection.ts`
 );
 
 const t = useTranslations(
   {
-    h2: 'Menghemat waktu dengan membuat dunia <span class="text-primary">lebih produktif</span>',
-    aboutTitle: "Siapa Kami ?",
+    badge: "TENTANG PEMUDA HANDAL",
+    h2: 'Membantu Bisnis Berkembang Cepat dengan <span class="text-primary">Solusi Digital Tepat Sasaran</span>',
+    aboutTitle: "Siapa Kami?",
     aboutContent:
-      "Pemuda Handal adalah perusahaan yang bergerak di bidang teknologi digital yang menyediakan berbagai solusi digital untuk meningkatkan efisiensi, memperkuat strategi pemasaran, dan mendorong pertumbuhan bisnis klien kami.",
+      "Pemuda Handal adalah software agency dan studio kreatif digital yang berfokus pada pengembangan website modern, aplikasi kustom, dan virtual tour 360° untuk mempercepat efisiensi dan pertumbuhan bisnis klien.",
     visionTitle: "Visi Kami",
     visionContent:
-      "Menjadi mitra terpercaya dalam transformasi digital yang memberdayakan bisnis untuk tumbuh dan berkembang, dengan mengedepankan nilai kekeluargaan dan profesionalisme.",
+      "Menjadi mitra transformasi teknologi terdepan dan terpercaya di Indonesia yang mendemokratisasikan adopsi teknologi berkelas dunia bagi UMKM, perusahaan, dan institusi.",
+    commitmentTitle: "Komitmen Kami",
+    commitmentContent:
+      "Kami memprioritaskan komunikasi transparan, ketepatan waktu pengerjaan, kode yang bersih dan scalable, serta dukungan pemeliharaan jangka panjang tanpa biaya tersembunyi.",
   },
   {
     data: translations,
@@ -27,55 +32,85 @@ const t = useTranslations(
 ---
 
 <section
-  class="flex flex-col w-full gap-20 px-5 pb-10 max-w-screen-xl min-h-screen lg:px-10 xl:px-0 xl:mx-auto"
+  class="relative py-20 lg:py-28 max-w-screen-xl mx-auto px-5 lg:px-10 xl:px-8"
   id="about"
 >
-  <div
-    class="pt-20 md:pt-24 flex flex-col lg:flex-row-reverse gap-4 lg:items-center lg:justify-center"
-  >
-    <div class="flex lg:flex-1">
+  <!-- Background decoration -->
+  <div class="pointer-events-none absolute -right-20 top-40 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+
+  <!-- Header & Intro -->
+  <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+    <div class="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left gap-4">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+        <span>🤝</span>
+        <span>{t.badge}</span>
+      </div>
+
       <h2
-        class="text-2xl text-center lg:text-left md:text-3xl xl:text-4xl xl:pr-20 xl:leading-snug font-bold"
+        class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900 leading-tight"
         set:html={t.h2}
       />
+
+      <p class="text-slate-600 text-base sm:text-lg leading-relaxed pt-2">
+        {t.aboutContent}
+      </p>
     </div>
 
-    <div class="flex lg:flex-1 items-center justify-center">
-      <img
-        src={AboutImg.src}
-        alt="Handshake Image"
-        class="w-3/4 md:w-1/2 lg:w-3/4"
-      />
+    <div class="flex-1 flex justify-center relative">
+      <div class="relative max-w-md w-full">
+        <!-- Ambient ring -->
+        <div class="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-3xl blur-xl -z-10 transform rotate-3"></div>
+        <img
+          src={AboutImg.src}
+          alt="Partnership Pemuda Handal"
+          class="w-full h-auto object-contain rounded-2xl drop-shadow-lg hover:scale-105 transition-transform duration-500"
+        />
+      </div>
     </div>
   </div>
 
-  <div class="flex flex-col gap-20 md:flex-row">
-    <div class="flex md:flex-1 flex-col gap-2">
-      <div
-        class="flex gap-4 items-center justify-center font-bold md:text-lg lg:justify-start"
-      >
-        <img src={QuestionMark.src} alt="" class="w-6 h-6" />
-        <span set:html={t.aboutTitle} />
+  <!-- 3 Pillars Grid with interactive hover effect -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mt-16">
+    <!-- Card 1 -->
+    <div class="group bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4">
+      <div class="w-12 h-12 rounded-xl bg-purple-50 text-primary flex items-center justify-center p-2.5 shadow-sm group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+        <img src={QuestionMark.src} alt="Who are we" class="w-6 h-6 object-contain" />
       </div>
-
-      <p
-        class="text-center text-sm md:text-base lg:text-left"
-        set:html={t.aboutContent}
-      />
+      <h3 class="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-primary transition-colors">
+        {t.aboutTitle}
+      </h3>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        {t.aboutContent}
+      </p>
     </div>
 
-    <div class="flex md:flex-1 flex-col gap-2">
-      <div
-        class="flex gap-4 items-center justify-center font-bold md:text-lg lg:justify-start"
-      >
-        <img src={Rocket.src} alt="" class="w-6 h-6" />
-        <span set:html={t.visionTitle} />
+    <!-- Card 2 -->
+    <div class="group bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4">
+      <div class="w-12 h-12 rounded-xl bg-purple-50 text-primary flex items-center justify-center p-2.5 shadow-sm group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300">
+        <img src={Rocket.src} alt="Our vision" class="w-6 h-6 object-contain" />
       </div>
+      <h3 class="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-primary transition-colors">
+        {t.visionTitle}
+      </h3>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        {t.visionContent}
+      </p>
+    </div>
 
-      <p
-        class="text-center text-sm md:text-base lg:text-left"
-        set:html={t.visionContent}
-      />
+    <!-- Card 3 -->
+    <div class="group bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4">
+      <div class="w-12 h-12 rounded-xl bg-purple-50 text-primary flex items-center justify-center p-2.5 shadow-sm group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-300 text-2xl font-bold">
+        <span>🛡️</span>
+      </div>
+      <h3 class="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-primary transition-colors">
+        {t.commitmentTitle}
+      </h3>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        {t.commitmentContent}
+      </p>
     </div>
   </div>
+
+  <!-- Interactive Workflow Stepper -->
+  <WorkflowRoadmap client:visible locale={locale} />
 </section>

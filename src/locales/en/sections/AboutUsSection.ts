@@ -1,9 +1,13 @@
 export const translations = {
-  h2: 'Save time by making the world <span class="text-primary">more productive</span>',
-  aboutTitle: "Who Are We ?",
+  badge: "ABOUT PEMUDA HANDAL",
+  h2: 'Accelerating Business Growth with <span class="text-primary">Tailored Digital Solutions</span>',
+  aboutTitle: "Who We Are",
   aboutContent:
-    "Pemuda Handal is a digital technology company that provides various digital solutions to improve efficiency, strengthen marketing strategies, and drive business growth for our clients.",
+    "Pemuda Handal is a software agency and digital creative studio focused on engineering modern websites, custom applications, and 360° virtual tours to boost client efficiency and commercial reach.",
   visionTitle: "Our Vision",
   visionContent:
-    "To be a trusted partner in digital transformation that empowers businesses to grow and develop, by prioritizing family values and professionalism.",
+    "To be the premier, trusted digital transformation partner empowering businesses, enterprises, and institutions with accessible, world-class technology.",
+  commitmentTitle: "Our Commitment",
+  commitmentContent:
+    "We prioritize transparent collaboration, punctual deliverables, clean and scalable architecture, and continuous technical support with zero hidden fees.",
 };

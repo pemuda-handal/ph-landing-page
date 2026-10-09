@@ -1,28 +1,23 @@
 ---
-import Destination from "@assets/images/destination.svg";
-import Hotel from "@assets/images/hotel.svg";
-import Meteor from "@assets/images/meteor.png";
-import Museum from "@assets/images/museum.svg";
-import Perumahan from "@assets/images/perumahan.svg";
 import ProductLanding from "@assets/images/products/product-landing.png";
 import ProductMobileApp from "@assets/images/products/product-mobile-app.png";
 import ProductUIDesign from "@assets/images/products/product-ui-ux-design.png";
 import ProductVintero from "@assets/images/products/product-vintero.png";
 import ProductWebApp from "@assets/images/products/product-web-app.png";
-import Restaurant from "@assets/images/restaurant.svg";
-import CardComponent from "@components/CardComponent.astro";
-import ChipComponent from "@components/ChipComponent.astro";
+import ServicesShowcase from "@components/ServicesShowcase.svelte";
 import { useTranslations } from "astro-nanointl";
 
-const locale = Astro.currentLocale || "id";
+const locale = (Astro.currentLocale || "id") as "id" | "en";
 const { translations } = await import(
   `../locales/${locale}/sections/ProductServiceSection.ts`
 );
 
 const t = useTranslations(
   {
-    h2: 'Menghemat waktu dengan membuat dunia <span class="text-primary">lebih produktif</span>',
-    cardMore: "Baca Selengkapnya",
+    badge: "LAYANAN & PRODUK UNGGULAN",
+    h2: 'Solusi Teknologi Digital <span class="text-primary">Terlengkap & Fleksibel</span>',
+    subtitle:
+      "Mulai dari website berkonversi tinggi, platform web & mobile kustom, hingga pengalaman interaktif Virtual Tour 360° siap pakai.",
   },
   {
     data: translations,
@@ -30,279 +25,176 @@ const t = useTranslations(
   }
 );
 
-const chipComponents: {
-  name: { [key: string]: string };
-  svg: ImageMetadata;
-}[] = [
+const services = [
   {
-    name: { id: "Perumahan", en: "Residence" },
-    svg: Perumahan,
-  },
-  {
-    name: { id: "Hotel", en: "Hotel" },
-    svg: Hotel,
-  },
-  {
-    name: { id: "Restoran", en: "Restaurant" },
-    svg: Restaurant,
-  },
-  {
-    name: { id: "Museum", en: "Museum" },
-    svg: Museum,
-  },
-  {
-    name: { id: "Destinasi Wisata", en: "Tourist Destination" },
-    svg: Destination,
-  },
-];
-
-const services: {
-  title: { [key: string]: string };
-  detail: { [key: string]: string };
-  image: ImageMetadata;
-  titleLink?: { [key: string]: string };
-  link?: string;
-}[] = [
-  {
-    title: { id: "VinteroVR", en: "VinteroVR" },
+    id: "vintero",
+    title: { id: "VinteroVR (360° Virtual Tour)", en: "VinteroVR (360° Virtual Tour)" },
+    badge: { id: "🔥 Inovasi Unggulan", en: "🔥 Flagship Innovation" },
     detail: {
-      id: "Solusi terbaik untuk pemasaran properti Anda. Dengan teknologi 360° Virtual Tour, Anda dapat menampilkan properti Anda dengan lebih interaktif dan menarik.",
-      en: "The best solution for your property marketing. With 360° Virtual Tour technology, you can showcase your property in a more interactive and attractive way.",
+      id: "Solusi pemasaran properti dan destinasi dengan teknologi 360° Virtual Tour interaktif. Calon pelanggan dapat menjelajahi ruang nyata dari browser atau VR headset.",
+      en: "Immersive 360° Virtual Tour platform for real estate, hospitality, and destinations. Explore real spaces from any browser or VR headset.",
     },
-    image: ProductVintero,
-    link: "https://vinterovr.com",
-    titleLink: { id: "Pelajari", en: "Learn More" },
+    imageSrc: ProductVintero.src,
+    features: {
+      id: [
+        "Fotografi & Render Panorama 360° Resolusi Tinggi",
+        "Hotspot interaktif untuk info titik ruangan & video",
+        "Kompatibel smartphone, tablet, desktop & VR headset",
+        "Dapat di-embed langsung ke website atau Google Street View",
+      ],
+      en: [
+        "High-definition 360° panoramic photography & render",
+        "Interactive hotspots for room specs, photos & videos",
+        "Fully responsive on mobile, desktop & VR headsets",
+        "Effortless website embed & Google Street View sync",
+      ],
+    },
+    externalUrl: "https://vinterovr.com",
+    isVirtualReality: true,
   },
   {
-    title: { id: "Landing Page", en: "Landing Page" },
+    id: "landing",
+    title: { id: "Landing Page Berkonversi Tinggi", en: "High-Converting Landing Pages" },
+    badge: { id: "⚡ Paling Populer", en: "⚡ Most Popular" },
     detail: {
-      id: "Maksimalkan kesan pertama bisnis Anda melalui landing page yang dirancang secara profesional, dengan fokus pada estetika dan efektivitas konversi.",
-      en: "Maximize the first impression of your business through a professionally designed landing page, focusing on aesthetics and conversion effectiveness.",
+      id: "Maksimalkan penjualan dan branding dengan landing page modern yang dirancang secara strategis, loading super cepat (< 1 detik), dan terintegrasi WhatsApp.",
+      en: "Maximize leads and sales with ultra-fast modern landing pages engineered with conversion copywriting and instant WhatsApp integration.",
     },
-    image: ProductLanding,
+    imageSrc: ProductLanding.src,
+    features: {
+      id: [
+        "Desain kustom unik & responsif di semua ukuran layar",
+        "Optimasi Core Web Vitals & skor SEO terbaik",
+        "Integrasi analitik (Google Analytics, Meta Pixel, TikTok)",
+        "Formulir kontak & WhatsApp order generator otomatis",
+      ],
+      en: [
+        "Custom responsive design for all screen resolutions",
+        "Core Web Vitals & on-page technical SEO optimization",
+        "Analytics integration (Google Analytics, Meta Pixel)",
+        "Automated WhatsApp lead & inquiry generator",
+      ],
+    },
   },
   {
-    title: { id: "Aplikasi Web", en: "Web Application" },
+    id: "webapp",
+    title: { id: "Aplikasi Web & Dashboard Kustom", en: "Custom Web Apps & Dashboards" },
     detail: {
-      id: "Kami menciptakan aplikasi web yang tidak hanya terlihat menarik, tetapi juga mampu mendukung kebutuhan operasional dan efisiensi bisnis Anda.",
-      en: "We create web applications that not only look good, but are also able to support the operational needs and efficiency of your business.",
+      id: "Sistem aplikasi web berbasis cloud untuk efisiensi operasional bisnis: portal internal, sistem inventaris, booking online, hingga platform SaaS kustom.",
+      en: "Cloud-based web applications engineered for operational efficiency: internal ERPs, inventory systems, booking portals, and custom SaaS platforms.",
     },
-    image: ProductWebApp,
+    imageSrc: ProductWebApp.src,
+    features: {
+      id: [
+        "Dashboard admin modern & visualisasi data analitik",
+        "Autentikasi aman, manajemen peran & hak akses (RBAC)",
+        "Arsitektur database relasional & REST / GraphQL API",
+        "Deployment otomatis & infrastruktur cloud scalable",
+      ],
+      en: [
+        "Modern admin dashboard with interactive data charts",
+        "Secure user authentication & role-based permissions",
+        "Robust database architecture & REST/GraphQL APIs",
+        "Automated CI/CD & scalable cloud server deployment",
+      ],
+    },
   },
   {
-    title: { id: "Aplikasi Mobile", en: "Mobile Application" },
+    id: "mobileapp",
+    title: { id: "Aplikasi Mobile (Android & iOS)", en: "Mobile Apps (Android & iOS)" },
     detail: {
-      id: "Raih audiens yang lebih luas melalui aplikasi mobile yang dirancang khusus untuk perangkat Android dan iOS, dengan performa tinggi dan fitur yang relevan",
-      en: "Reach a wider audience through mobile apps designed specifically for Android and iOS devices, with high performance and relevant features.",
+      id: "Jangkau pelanggan langsung di genggaman mereka melalui aplikasi mobile dengan performa gesit, antarmuka nyaman, dan fitur notifikasi otomatis.",
+      en: "Reach customers right in their pocket with high-performance cross-platform mobile apps featuring intuitive UX and push notifications.",
     },
-    image: ProductMobileApp,
+    imageSrc: ProductMobileApp.src,
+    features: {
+      id: [
+        "Pengembangan cross-platform efisien (Flutter / React Native)",
+        "Integrasi Push Notification & Offline Mode",
+        "Integrasi Payment Gateway resmi (Midtrans, Xendit)",
+        "Bantuan publikasi ke Google Play Store & Apple App Store",
+      ],
+      en: [
+        "Cross-platform efficiency with Flutter / React Native",
+        "Push notifications & offline caching capabilities",
+        "Official payment gateway integrations (Midtrans, Stripe)",
+        "Assistance with Google Play & App Store publishing",
+      ],
+    },
   },
   {
-    title: { id: "UI/UX Design", en: "UI/UX Design" },
+    id: "uiux",
+    title: { id: "UI/UX Design & Prototipe Interaktif", en: "UI/UX Design & Prototyping" },
     detail: {
-      id: "Tingkatkan pengalaman pengguna dengan desain UI/UX yang elegan, intuitif, dan berorientasi pada kenyamanan pelanggan",
-      en: "Enhance user experience with elegant, intuitive, and customer-centric UI/UX design",
+      id: "Rancang pengalaman pengguna kelas dunia sebelum memulai koding. Kami membuat design system lengkap, wireframe, dan prototipe klik interaktif di Figma.",
+      en: "Craft world-class user journeys before writing a line of code. Complete Figma design systems, wireframing, and interactive clickable prototypes.",
     },
-    image: ProductUIDesign,
+    imageSrc: ProductUIDesign.src,
+    features: {
+      id: [
+        "Riset pengguna & pemetaan alur sistem (User Journey)",
+        "Design System & UI Component Library di Figma",
+        "Prototipe klik interaktif untuk pengujian awal",
+        "Desain siap implementasi (Developer Handoff rapi)",
+      ],
+      en: [
+        "User research & system flow mapping (User Journeys)",
+        "Standardized Figma Design System & UI component library",
+        "Interactive clickable prototype for stakeholder testing",
+        "Clean asset handoff with specs for developer team",
+      ],
+    },
   },
   {
-    title: { id: "Maintenance", en: "Maintenance" },
+    id: "maintenance",
+    title: { id: "Pemeliharaan & Optimasi Cloud", en: "System Maintenance & Cloud Support" },
     detail: {
-      id: "Pastikan sistem digital Anda tetap optimal dan up-to-date. Kami menawarkan layanan maintenance jika Anda butuh melakukan pembaruan terhadap sistem digital yang telah Anda bangun.",
-      en: "Keep your digital system optimized and up-to-date. We offer maintenance services if you need to update the digital system you have built.",
+      id: "Pastikan sistem digital bisnis Anda selalu aman, online 24/7, dan mutakhir dengan layanan pemeliharaan teknis berkala dan perbaikan cepat.",
+      en: "Ensure your digital systems stay secure, online 24/7, and up-to-date with proactive maintenance, cloud monitoring, and rapid bug resolution.",
     },
-    image: ProductWebApp,
+    imageSrc: ProductWebApp.src,
+    features: {
+      id: [
+        "Monitoring server & uptime 24/7",
+        "Backup data berkala & mitigasi pemulihan bencana",
+        "Audit berkala performa loading & celah keamanan",
+        "Dukungan teknis prioritas untuk penambahan fitur",
+      ],
+      en: [
+        "24/7 server monitoring and uptime protection",
+        "Routine database backups & disaster recovery setup",
+        "Regular loading speed audit and security patches",
+        "Priority technical support for incremental feature upgrades",
+      ],
+    },
   },
 ];
 ---
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll("#product button.read-more").forEach((el) => {
-      el.addEventListener("click", () => {
-        el.parentElement
-          ?.querySelector(".card-detail")
-          ?.classList.remove("line-clamp-4");
-      });
-    });
-
-    document
-      .querySelector("#product .card-container")
-      ?.addEventListener("scroll", (e) => {
-        const targetEl = e.target as HTMLDivElement;
-
-        const isLeftEnd = targetEl.scrollLeft === 0;
-
-        if (isLeftEnd) {
-          document
-            .querySelector("#product button.prev")
-            ?.classList.add("opacity-0");
-        } else {
-          document
-            .querySelector("#product button.prev")
-            ?.classList.remove("opacity-0");
-        }
-
-        const isRightEnd =
-          targetEl.scrollWidth - targetEl.scrollLeft === targetEl.clientWidth;
-
-        if (isRightEnd) {
-          document
-            .querySelector("#product button.next")
-            ?.classList.add("opacity-0");
-        } else {
-          document
-            .querySelector("#product button.next")
-            ?.classList.remove("opacity-0");
-        }
-      });
-  });
-</script>
-
-<script is:inline>
-  function productScrollRight() {
-    document.querySelector("#product .card-container")?.scrollBy(360, 0);
-  }
-
-  function productScrollLeft() {
-    document.querySelector("#product .card-container")?.scrollBy(-360, 0);
-  }
-</script>
-
 <section
-  class="px-5 pb-20 min-h-screen flex items-center lg:py-20 max-w-screen-xl lg:px-10 xl:px-0 xl:mx-auto"
+  class="relative py-20 lg:py-28 max-w-screen-xl mx-auto px-5 lg:px-10 xl:px-8"
   id="product"
 >
-  <div
-    class="flex flex-col items-center w-full gap-20 lg:flex-row lg:items-stretch"
-  >
-    <div
-      class="product pt-20 md:pt-24 lg:pt-0 flex flex-col items-center gap-10 flex-1 lg:justify-between lg:items-start"
-    >
-      <img src={Meteor.src} alt="meteor" class="flex-1" />
+  <!-- Ambient background glow -->
+  <div class="pointer-events-none absolute -right-20 top-1/3 w-80 h-80 bg-secondary/5 rounded-full blur-3xl"></div>
 
-      <div class="flex flex-col items-center gap-5 lg:gap-10 lg:items-start">
-        <h2
-          class="font-bold text-2xl md:text-3xl xl:text-4xl xl:leading-snug"
-          set:html={t.h2}
-        />
-
-        <div
-          class="flex flex-row gap-x-2 gap-y-4 flex-wrap justify-center lg:justify-start"
-        >
-          {
-            chipComponents.map((data) => {
-              return (
-                <ChipComponent name={data.name[locale]} emote={data.svg} />
-              );
-            })
-          }
-        </div>
-      </div>
+  <!-- Header -->
+  <div class="flex flex-col items-center text-center gap-4 mb-12 max-w-3xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+      <span>✨</span>
+      <span>{t.badge}</span>
     </div>
 
-    <div class="relative lg:w-1/2 flex">
-      <button
-        class="prev hidden absolute opacity-0 transition-opacity -left-10 top-1/2 -translate-y-1/2 bg-primary text-white h-12 w-12 lg:flex items-center justify-center rounded-full z-20"
-        onclick="productScrollLeft()"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1em"
-          height="1em"
-          viewBox="0 0 24 24"
-          class="w-8 h-8"
-          ><path
-            fill="currentColor"
-            d="m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z"></path></svg
-        >
-      </button>
+    <h2
+      class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900 leading-tight"
+      set:html={t.h2}
+    />
 
-      <div
-        class="card-container flex flex-col gap-5 xl:gap-10 sm:grid sm:grid-cols-2 lg:flex lg:flex-row lg:overflow-auto px-10 scroll-px-5 -mx-10 py-5 -my-5 -mb-10 pb-10 scroll-smooth snap-x"
-      >
-        {
-          services.map((data) => {
-            return (
-              <CardComponent
-                title={data.title[locale]}
-                detail={data.detail[locale]}
-                image={data.image}
-                link={data.link}
-                customClass="min-w-[60%] snap-start snap-normal"
-                titleLink={data.titleLink ? data.titleLink[locale] : t.cardMore}
-                size="xl"
-              />
-            );
-          })
-        }
-      </div>
-
-      <button
-        class="next hidden absolute transition-opacity -right-4 2xl:-right-16 top-1/2 -translate-y-1/2 bg-primary text-white h-12 w-12 lg:flex items-center justify-center rounded-full z-20"
-        onclick="productScrollRight()"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1em"
-          height="1em"
-          viewBox="0 0 24 24"
-          class="w-8 h-8"
-          ><path fill="currentColor" d="M12.6 12L8 7.4L9.4 6l6 6l-6 6L8 16.6z"
-          ></path></svg
-        >
-      </button>
-    </div>
+    <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
+      {t.subtitle}
+    </p>
   </div>
+
+  <!-- Interactive Services Showcase -->
+  <ServicesShowcase client:visible locale={locale} services={services} />
 </section>
-
-<style>
-  .product {
-    /* animation: productMove 2s ease-in; */
-  }
-
-  .card-container::-webkit-scrollbar {
-    display: none;
-  }
-
-  .card-container {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none;
-    /* position: relative; */
-    /* animation: cardMove 2s ease-in; */
-  }
-
-  @keyframes productMove {
-    0% {
-      transform: translate(200%, -3%);
-      color: #7241ff;
-    }
-    50% {
-      transform: translateX(-10%);
-      color: #7b78ff;
-    }
-    100% {
-      transform: translateX(0%);
-      color: #353879;
-    }
-  }
-
-  @keyframes cardMove {
-    0% {
-      transform: translate(200%, 30%);
-      color: #7241ff;
-    }
-    50% {
-      transform: translate(-10%, 10%);
-      color: #7b78ff;
-    }
-    75% {
-      transform: translateX(3%);
-      color: #7b78ff;
-    }
-    100% {
-      transform: translateX(0%);
-      color: #353879;
-    }
-  }
-</style>

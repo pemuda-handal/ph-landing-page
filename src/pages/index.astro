@@ -1,14 +1,17 @@
 ---
+import FloatingActions from "@components/FloatingActions.svelte";
 import Footer from "@components/Footer.astro";
 import Header from "@components/Header.astro";
+import TechMarquee from "@components/TechMarquee.astro";
 import Layout from "@layouts/Layout.astro";
-// import ClientListComponent from "@components/ClientListComponent.astro";
 import AboutUsSection from "@sections/AboutUsSection.astro";
+import ConnectSection from "@sections/ConnectSection.astro";
+import EstimatorSection from "@sections/EstimatorSection.astro";
+import FaqSection from "@sections/FaqSection.astro";
 import HeroSection from "@sections/HeroSection.astro";
 import PortofolioSection from "@sections/PortofolioSection.astro";
 import ProductServiceSection from "@sections/ProductServiceSection.astro";
-// import TestimoniSection from "@sections/TestimoniSection.astro";
-import ConnectSection from "@sections/ConnectSection.astro";
+import TestimoniSection from "@sections/TestimoniSection.astro";
 import { useTranslations } from "astro-nanointl";
 
 const locale = Astro.currentLocale || "id";
@@ -16,9 +19,9 @@ const { translations } = await import(`../locales/${locale}/pages/index.ts`);
 
 const t = useTranslations(
   {
-    title: "Beranda - Pemuda Handal",
+    title: "Pemuda Handal - Software Agency & Solusi Digital Modern",
     description:
-      "Pemuda Handal adalah perusahaan yang bergerak di bidang teknologi digital yang menyediakan berbagai solusi digital untuk meningkatkan efisiensi, memperkuat strategi pemasaran, dan mendorong pertumbuhan bisnis klien kami.",
+      "Pemuda Handal adalah software agency dan digital studio yang menyediakan jasa pembuatan landing page berkonversi tinggi, aplikasi web & mobile kustom, serta teknologi 360° Virtual Tour interaktif.",
   },
   {
     data: translations,
@@ -30,19 +33,43 @@ const t = useTranslations(
 <Layout
   title={t.title}
   description={t.description}
-  keywords="blog, artikel, teknologi, programming, desain, informasi, vinterovr, vintero vr, vintero, vr, vintero virtual reality, virtual reality, vr, vintero vr blog, vintero vr artikel, vintero vr teknologi, vintero vr programming, vintero vr desain, vintero vr informasi"
-  url="https://vinterovr.com/blog"
+  keywords="pemuda handal, software agency malang, jasa pembuatan website, bikin landing page, aplikasi web custom, flutter mobile app, vinterovr, virtual tour 360, software house indonesia, ui ux design figma"
+  url="https://pemudahandal.id"
   imageUrl="/images/meta-tags.png"
 >
   <Header />
-  <main class="relative overflow-hidden">
+
+  <main class="relative overflow-hidden bg-white text-slate-800">
+    <!-- 1. Hero Section -->
     <HeroSection />
-    <!-- <ClientListComponent /> -->
-    <AboutUsSection />
-    <PortofolioSection />
+
+    <!-- 2. Tech Stack & Solutions Ribbon -->
+    <TechMarquee locale="id" />
+
+    <!-- 3. Services & Products Showcase -->
     <ProductServiceSection />
-    <!-- <TestimoniSection /> -->
+
+    <!-- 4. Interactive Portfolio Showcase -->
+    <PortofolioSection />
+
+    <!-- 5. Interactive Project Scope & Cost Estimator -->
+    <EstimatorSection />
+
+    <!-- 6. About Us & Workflow Roadmap -->
+    <AboutUsSection />
+
+    <!-- 7. Interactive Client Testimonials -->
+    <TestimoniSection />
+
+    <!-- 8. Interactive FAQ Accordion -->
+    <FaqSection />
+
+    <!-- 9. High-impact Connect CTA Banner -->
     <ConnectSection />
   </main>
+
+  <!-- Floating WhatsApp & Scroll-to-Top Actions -->
+  <FloatingActions client:load locale="id" />
+
   <Footer />
 </Layout>

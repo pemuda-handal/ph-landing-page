@@ -1,6 +1,9 @@
 export const translations = {
   linkAboutLabel: "Tentang",
-  linkProductLabel: "Produk",
+  linkProductLabel: "Layanan",
+  linkPortfolioLabel: "Portofolio",
+  linkEstimatorLabel: "Kalkulator Biaya",
+  linkFaqLabel: "FAQ",
   linkBlogLabel: "Blog",
-  contactUsLabel: "Hubungi Kami",
+  contactUsLabel: "Konsultasi Gratis",
 };

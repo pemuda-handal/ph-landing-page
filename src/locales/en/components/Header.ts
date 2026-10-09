@@ -1,6 +1,9 @@
 export const translations = {
   linkAboutLabel: "About",
-  linkProductLabel: "Product",
+  linkProductLabel: "Services",
+  linkPortfolioLabel: "Portfolio",
+  linkEstimatorLabel: "Calculator",
+  linkFaqLabel: "FAQ",
   linkBlogLabel: "Blog",
-  contactUsLabel: "Contact Us",
+  contactUsLabel: "Free Consult",
 };

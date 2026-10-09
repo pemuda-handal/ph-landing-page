@@ -1,5 +1,16 @@
 export const translations = {
-  h1: 'Explore <span class="text-primary">Digital Future</span> <br /> with <span class="text-primary">Pemuda Handal</span>',
-  p: "Best and Truted Professional Technolgy Partner For Your Digital Transformation",
+  badge: "✨ Leading Digital Solutions & 360° Innovation",
+  h1: 'Explore the <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">Digital Future</span> with <span class="text-primary">Pemuda Handal</span>',
+  p: "Trusted professional technology partner for modern websites, custom web & mobile apps, and immersive 360° virtual experiences that accelerate your business growth.",
   cta: "View Portfolio",
+  ctaSecondary: "Calculate Project Cost",
+  stat1Value: "50+",
+  stat1Label: "Successful Projects",
+  stat2Value: "99.8%",
+  stat2Label: "Client Satisfaction",
+  stat3Value: "24/7",
+  stat3Label: "Dedicated Support",
+  floatBadge1: "⚡ Modern & Ultra Fast",
+  floatBadge2: "🌐 360° Virtual Tour",
+  floatBadge3: "📱 Multi-Platform App",
 };

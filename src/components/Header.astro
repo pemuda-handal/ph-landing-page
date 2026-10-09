@@ -1,5 +1,4 @@
 ---
-import Button from "./ButtonComponent.astro";
 import LanguageSelector from "./LanguageSelector.svelte";
 import Logo from "@assets/images/logo.png";
 import { useTranslations } from "astro-nanointl";
@@ -12,9 +11,12 @@ const { translations } = await import(
 const t = useTranslations(
   {
     linkAboutLabel: "Tentang",
-    linkProductLabel: "Produk",
+    linkProductLabel: "Layanan",
+    linkPortfolioLabel: "Portofolio",
+    linkEstimatorLabel: "Kalkulator",
+    linkFaqLabel: "FAQ",
     linkBlogLabel: "Blog",
-    contactUsLabel: "Hubungi Kami",
+    contactUsLabel: "Konsultasi Gratis",
   },
   {
     data: translations,
@@ -26,12 +28,24 @@ const homeHref = `/${pageLocale === "id" ? "" : pageLocale}`;
 
 const menuList = [
   {
+    label: t.linkProductLabel,
+    href: `/${pageLocale === "id" ? "" : pageLocale}#product`,
+  },
+  {
+    label: t.linkPortfolioLabel,
+    href: `/${pageLocale === "id" ? "" : pageLocale}#portfolio`,
+  },
+  {
+    label: t.linkEstimatorLabel,
+    href: `/${pageLocale === "id" ? "" : pageLocale}#estimator`,
+  },
+  {
     label: t.linkAboutLabel,
     href: `/${pageLocale === "id" ? "" : pageLocale}#about`,
   },
   {
-    label: t.linkProductLabel,
-    href: `/${pageLocale === "id" ? "" : pageLocale}#product`,
+    label: t.linkFaqLabel,
+    href: `/${pageLocale === "id" ? "" : pageLocale}#faq`,
   },
   {
     label: t.linkBlogLabel,
@@ -43,48 +57,64 @@ const menuList = [
 <script is:inline>
   function openNavbar() {
     const menu = document.querySelector("#menu");
-    menu?.classList.add("-translate-x-full");
+    menu?.classList.remove("translate-x-full");
+    menu?.classList.add("translate-x-0");
+    document.body.style.overflow = "hidden";
   }
 
   function closeNavbar() {
     const menu = document.querySelector("#menu");
-    menu?.classList.remove("-translate-x-full");
+    menu?.classList.remove("translate-x-0");
+    menu?.classList.add("translate-x-full");
+    document.body.style.overflow = "auto";
   }
 </script>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    document.addEventListener("scroll", () => {
-      const headerEl = document.querySelector("#header");
-      if (window.scrollY > 64) {
-        headerEl?.classList.add("shadow-lg");
+    const headerEl = document.querySelector("#header");
+    const checkScroll = () => {
+      if (window.scrollY > 20) {
+        headerEl?.classList.add("shadow-sm", "bg-white/95", "backdrop-blur-md");
+        headerEl?.classList.remove("bg-white/80");
       } else {
-        headerEl?.classList.remove("shadow-lg");
+        headerEl?.classList.remove("shadow-sm", "bg-white/95");
+        headerEl?.classList.add("bg-white/80", "backdrop-blur-md");
       }
-    });
+    };
+    window.addEventListener("scroll", checkScroll);
+    checkScroll();
   });
 </script>
 
-<header class="top-0 w-full bg-white z-50 text-black sticky" id="header">
+<header
+  class="fixed top-0 left-0 right-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-100/80 z-50 text-slate-800 transition-all duration-300"
+  id="header"
+>
   <div
-    class="flex items-center justify-between max-w-screen-2xl mx-auto h-16 px-5 2xl:px-0 lg:h-20 lg:px-10"
+    class="flex items-center justify-between max-w-screen-xl mx-auto h-20 px-5 lg:px-10 xl:px-8"
   >
-    <a href={homeHref}>
+    <!-- Brand Logo -->
+    <a href={homeHref} class="flex items-center gap-2 group">
       <img
         src={Logo.src}
-        alt="PemudaHandal Logo"
-        class="h-16 lg:h-24 w-auto aspect-video object-cover -ms-4 lg:-ms-5"
+        alt="Pemuda Handal Logo"
+        class="h-10 sm:h-12 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
       />
     </a>
 
+    <!-- Desktop Navigation -->
     <nav class="hidden lg:block">
       <ul
-        class="flex justify-between text-sm 2xl:text-base text-black font-bold items-center gap-14 xl:gap-20"
+        class="flex items-center text-sm font-semibold text-slate-700 gap-6 xl:gap-8"
       >
         {
           menuList.map((menu) => (
             <li>
-              <a href={menu.href} class="px-8">
+              <a
+                href={menu.href}
+                class="hover:text-primary transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary hover:after:w-full after:transition-all after:duration-200"
+              >
                 {menu.label}
               </a>
             </li>
@@ -93,63 +123,79 @@ const menuList = [
       </ul>
     </nav>
 
-    <div class="items-center gap-5 hidden lg:flex lg:flex-row">
+    <!-- Desktop Language Selector & WhatsApp CTA -->
+    <div class="items-center gap-4 hidden lg:flex">
       <LanguageSelector pageLocale={pageLocale} client:load />
 
-      <Button
-        size="sm"
-        href="https://api.whatsapp.com/send/?phone=6285156353319&type=phone_number&app_absent=0"
+      <a
+        href="https://api.whatsapp.com/send/?phone=6285156353319&text=Halo%20Pemuda%20Handal%2C%20saya%20ingin%20konsultasi%20proyek.&type=phone_number&app_absent=0"
         target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-secondary text-white font-bold text-xs shadow-md shadow-primary/20 hover:shadow-glow hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
       >
-        {t.contactUsLabel}
-      </Button>
+        <span>💬</span>
+        <span>{t.contactUsLabel}</span>
+      </a>
     </div>
 
-    <button class="lg:hidden" onclick="openNavbar()">
+    <!-- Mobile Hamburger Button -->
+    <button
+      type="button"
+      class="lg:hidden p-2 rounded-xl text-slate-800 hover:bg-slate-100 transition-colors"
+      onclick="openNavbar()"
+      aria-label="Open navigation menu"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="1em"
-        height="1em"
+        class="w-6 h-6"
+        fill="none"
         viewBox="0 0 24 24"
-        class="w-6 h-6 fill-black"
-        ><path d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"></path></svg
+        stroke="currentColor"
       >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+      </svg>
     </button>
   </div>
 </header>
 
+<!-- Mobile Navigation Drawer -->
 <div
   id="menu"
-  class="fixed z-50 flex flex-col items-center justify-between top-0 h-screen left-full transition transform duration-500 bg-white pb-20 px-5 lg:hidden w-screen"
+  class="fixed inset-0 z-50 flex flex-col justify-between h-screen w-screen bg-white/95 backdrop-blur-xl p-6 lg:hidden translate-x-full transition-transform duration-300 ease-out"
 >
-  <div class="flex w-full items-center justify-between">
-    <a href={homeHref} class="flex items-center">
+  <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+    <a href={homeHref} class="flex items-center" onclick="closeNavbar()">
       <img
         src={Logo.src}
-        alt="logo"
-        class="h-16 w-auto aspect-video object-cover -ms-4"
+        alt="Pemuda Handal Logo"
+        class="h-10 w-auto object-contain"
       />
     </a>
-    <button onclick="closeNavbar()">
+    <button
+      type="button"
+      onclick="closeNavbar()"
+      class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition-colors"
+      aria-label="Close navigation menu"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
+        class="w-5 h-5"
+        fill="none"
         viewBox="0 0 24 24"
-        class="fill-black"
-        ><path
-          d="M18.3 5.71a.996.996 0 0 0-1.41 0L12 10.59L7.11 5.7A.996.996 0 1 0 5.7 7.11L10.59 12L5.7 16.89a.996.996 0 1 0 1.41 1.41L12 13.41l4.89 4.89a.996.996 0 1 0 1.41-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4"
-        ></path></svg
+        stroke="currentColor"
       >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
     </button>
   </div>
-  <ul class="text-center text-black w-full font-bold flex flex-col gap-16">
+
+  <ul class="flex flex-col gap-5 py-6">
     {
       menuList.map((menu) => (
         <li>
           <a
             href={menu.href}
-            class="inline-block py-5 w-full"
+            class="block text-lg font-bold text-slate-800 hover:text-primary transition-colors py-1"
             onclick="closeNavbar()"
           >
             {menu.label}
@@ -159,12 +205,20 @@ const menuList = [
     }
   </ul>
 
-  <LanguageSelector pageLocale={pageLocale} client:load />
+  <div class="flex flex-col gap-4 border-t border-slate-100 pt-6">
+    <div class="flex justify-start">
+      <LanguageSelector pageLocale={pageLocale} client:load />
+    </div>
 
-  <Button
-    href="https://api.whatsapp.com/send/?phone=6285156353319&type=phone_number&app_absent=0"
-    target="_blank"
-  >
-    {t.contactUsLabel}
-  </Button>
+    <a
+      href="https://api.whatsapp.com/send/?phone=6285156353319&type=phone_number&app_absent=0"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-full bg-primary hover:bg-secondary text-white font-bold text-sm shadow-md transition-all text-center"
+      onclick="closeNavbar()"
+    >
+      <span>💬</span>
+      <span>{t.contactUsLabel}</span>
+    </a>
+  </div>
 </div>

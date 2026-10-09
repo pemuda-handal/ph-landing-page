@@ -40,21 +40,29 @@ const menuGroups: {
         href: `/${pageLocale === "id" ? "" : pageLocale}#about`,
       },
       {
-        label: t.press,
-        href: `/${pageLocale === "id" ? "" : pageLocale}#press`,
+        label: pageLocale === "en" ? "Portfolio" : "Portofolio",
+        href: `/${pageLocale === "id" ? "" : pageLocale}#portfolio`,
+      },
+      {
+        label: pageLocale === "en" ? "Testimonials" : "Testimoni",
+        href: `/${pageLocale === "id" ? "" : pageLocale}#testimonials`,
       },
     ],
   },
   {
-    label: t.resources,
+    label: pageLocale === "en" ? "Solutions" : "Solusi Digital",
     menuList: [
       {
-        label: t.blog,
-        href: `/${pageLocale === "id" ? "" : pageLocale + "/"}blog`,
+        label: pageLocale === "en" ? "Services" : "Layanan Kami",
+        href: `/${pageLocale === "id" ? "" : pageLocale}#product`,
       },
       {
-        label: t.support,
-        href: `/${pageLocale === "id" ? "" : pageLocale}#support`,
+        label: pageLocale === "en" ? "Cost Estimator" : "Kalkulator Estimasi",
+        href: `/${pageLocale === "id" ? "" : pageLocale}#estimator`,
+      },
+      {
+        label: "FAQ",
+        href: `/${pageLocale === "id" ? "" : pageLocale}#faq`,
       },
     ],
   },
@@ -62,9 +70,13 @@ const menuGroups: {
     label: t.products,
     menuList: [
       {
-        label: "Vintero VR",
+        label: "Vintero VR 360°",
         href: "https://vinterovr.com/",
         isExternal: true,
+      },
+      {
+        label: t.blog,
+        href: `/${pageLocale === "id" ? "" : pageLocale + "/"}blog`,
       },
     ],
   },

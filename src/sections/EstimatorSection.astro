@@ -1,0 +1,15 @@
+---
+import ProjectEstimator from "@components/ProjectEstimator.svelte";
+
+interface Props {
+  locale?: string;
+}
+
+const { locale = Astro.currentLocale || "id" } = Astro.props;
+const currentLocale = (locale || "id") as "id" | "en";
+---
+
+<section class="py-16 lg:py-24 max-w-screen-xl mx-auto px-5 lg:px-10 xl:px-8 relative">
+  <!-- Interactive Project Scope & Cost Estimator -->
+  <ProjectEstimator client:visible locale={currentLocale} />
+</section>

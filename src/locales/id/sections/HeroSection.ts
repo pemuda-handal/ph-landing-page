@@ -1,5 +1,16 @@
 export const translations = {
-  h1: 'Jelajahi <span class="text-primary">Masa Depan</span> Digital <br /> dengan <span class="text-primary">Pemuda Handal</span>',
-  p: "Mitra Teknologi Profesional Terbaik dan Terpercaya untuk Transformasi Digital Anda",
+  badge: "✨ Solusi Digital & Inovasi 360° Terpercaya",
+  h1: 'Jelajahi <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">Masa Depan Digital</span> Bersama <span class="text-primary">Pemuda Handal</span>',
+  p: "Mitra teknologi profesional untuk pengembangan website modern, aplikasi web & mobile kustom, serta pengalaman virtual 360° yang mendorong pertumbuhan bisnis Anda.",
   cta: "Lihat Portofolio",
+  ctaSecondary: "Hitung Estimasi Biaya",
+  stat1Value: "50+",
+  stat1Label: "Proyek Sukses",
+  stat2Value: "99.8%",
+  stat2Label: "Kepuasan Klien",
+  stat3Value: "24/7",
+  stat3Label: "Dukungan Responsif",
+  floatBadge1: "⚡ Modern & Ultra Cepat",
+  floatBadge2: "🌐 360° Virtual Tour",
+  floatBadge3: "📱 Multi-Platform App",
 };

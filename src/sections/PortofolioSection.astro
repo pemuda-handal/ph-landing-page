@@ -1,21 +1,24 @@
 ---
-import Card from "../components/CardComponent.astro";
-import ProjectGTA from "@assets/images/projects/project-gta.png";
-import ProjectSigmund from "@assets/images/projects/project-sigmund.png";
-import ProjectPouchpack from "@assets/images/projects/project-pouchpack.png";
 import ProjectABS from "@assets/images/projects/project-abs.png";
+import ProjectGTA from "@assets/images/projects/project-gta.png";
 import ProjectJagoTernak from "@assets/images/projects/project-jagoternak.png";
+import ProjectPouchpack from "@assets/images/projects/project-pouchpack.png";
+import ProjectSigmund from "@assets/images/projects/project-sigmund.png";
+import PortfolioShowcase from "@components/PortfolioShowcase.svelte";
+import type { ProjectItem } from "../types/portfolio";
 import { useTranslations } from "astro-nanointl";
 
-const locale = Astro.currentLocale || "id";
+const locale = (Astro.currentLocale || "id") as "id" | "en";
 const { translations } = await import(
   `../locales/${locale}/sections/PortfolioSection.ts`
 );
 
 const t = useTranslations(
   {
-    h2: "Portofolio Kami",
-    cardMore: "Selengkapnya",
+    badge: "KARYA & REKAM JEJAK",
+    h2: 'Portofolio Proyek <span class="text-primary">Terbaru Kami</span>',
+    subtitle:
+      "Jelajahi berbagai solusi website, aplikasi web, dan sistem kustom yang telah kami bangun dengan standar performa dan desain terbaik.",
   },
   {
     data: translations,
@@ -23,111 +26,179 @@ const t = useTranslations(
   }
 );
 
-const cardItems: {
-  title: { [index: string]: string };
-  detail: { [index: string]: string };
-  image: ImageMetadata;
-  link?: string;
-}[] = [
+const projects: ProjectItem[] = [
   {
+    id: "gta-five-project",
+    category: "landing",
+    categoryLabel: { id: "Landing Page", en: "Landing Page" },
+    client: "Five Project Indonesia",
     title: {
-      id: "GTA V Role Play Server: Five Project Indonesia Landing Page",
-      en: "GTA V Role Play Server: Five Project Indonesia Landing Page",
+      id: "GTA V Roleplay Server: Five Project Indonesia",
+      en: "GTA V Roleplay Server: Five Project Indonesia",
     },
-    detail: {
-      id: "Kami mengembangkan landing website sebagai sarana promosi dan penyampaian informasi server GTA V Roleplay.",
-      en: "We developed a landing website as a means of promotion and delivery of GTA V Roleplay server information.",
+    summary: {
+      id: "Landing page interaktif untuk komunitas gaming server GTA V Roleplay dengan integrasi panduan bermain dan pendaftaran whitelist.",
+      en: "Interactive landing page for the GTA V Roleplay gaming server community with gameplay guidelines and whitelist signups.",
     },
-    image: ProjectGTA,
-    link: "https://google.com",
+    challenge: {
+      id: "Komunitas membutuhkan halaman web yang memukau secara visual, cepat dibuka, dan mudah dimengerti pemain baru untuk memahami peraturan server.",
+      en: "The community needed a visually captivating, ultra-fast landing page where new players can easily understand server rules and join.",
+    },
+    solution: {
+      id: "Kami merancang tema gaming modern berkinerja tinggi, navigasi yang intuitif, dan alur pendaftaran terintegrasi langsung dengan Discord server.",
+      en: "We crafted a high-octane modern gaming theme with intuitive navigation and seamless Discord server integration.",
+    },
+    techStack: ["Astro", "Tailwind CSS", "TypeScript", "Discord API"],
+    features: {
+      id: ["Panduan Server & Rules Interaktif", "Whitelist Integration", "Mobile Optimized", "Animasi Halus"],
+      en: ["Interactive Server Guide & Rules", "Whitelist Integration", "Mobile Optimized", "Fluid Micro-interactions"],
+    },
+    imageSrc: ProjectGTA.src,
+    demoUrl: "https://fiveproject.id",
   },
   {
+    id: "sigmund-creatus",
+    category: "landing",
+    categoryLabel: { id: "Landing Page", en: "Landing Page" },
+    client: "Sigmund Creatus",
     title: {
       id: "Branding Agency: Sigmund Creatus Landing Page",
       en: "Branding Agency: Sigmund Creatus Landing Page",
     },
-    detail: {
-      id: "Klien kami Sigmund Creatus membutuhkan website landing page sebagai sarana promosi dan penyampaian informasi berkaitan dengan jasa mereka dalam membantu branding suatu bisnis.",
-      en: "Our client Sigmund Creatus needs a landing page website as a means of promotion and delivery of information related to their services in helping branding a business.",
+    summary: {
+      id: "Website profil dan landing page agensi branding kreatif dengan visual elegan dan presentasi portofolio profesional.",
+      en: "Agency profile website and landing page for a creative branding agency featuring elegant aesthetics and portfolio showcase.",
     },
-    image: ProjectSigmund,
-    link: "https://google.com",
+    challenge: {
+      id: "Menampilkan portofolio desain agensi dengan gaya minimalis, tipografi tegas, dan waktu muat yang sangat responsif di perangkat mobile.",
+      en: "Highlighting creative design case studies with a minimalist aesthetic, bold typography, and fast loading speed.",
+    },
+    solution: {
+      id: "Pengembangan web modern berbasis komponen ringan dengan layout editorial majalah dan optimasi kompresi gambar tingkat lanjut.",
+      en: "Modern component-driven web build with editorial layout style and advanced image optimization.",
+    },
+    techStack: ["Next.js", "Tailwind CSS", "Figma Design System", "Framer Motion"],
+    features: {
+      id: ["Showcase Karya Interaktif", "Formulir Kontak Cepat", "SEO On-Page", "Tipografi Editorial"],
+      en: ["Interactive Works Showcase", "Quick Contact Flow", "On-Page SEO", "Editorial Typography"],
+    },
+    imageSrc: ProjectSigmund.src,
+    demoUrl: "https://sigmundcreatus.com",
   },
   {
+    id: "pouchpack",
+    category: "landing",
+    categoryLabel: { id: "Landing Page", en: "Landing Page" },
+    client: "PouchPack Garment",
     title: {
       id: "Garment Business: PouchPack Landing Page",
       en: "Garment Business: PouchPack Landing Page",
     },
-    detail: {
-      id: "Klien kami PouchPack membutuhkan website landing page sebagai sarana promosi dan penyampaian informasi berkaitan dengan penjualan Pouch Custom seperti Packaging, Event, Souvenir, etc.",
-      en: "Our client PouchPack needs a landing page website as a means of promotion and delivery of information related to the sale of Custom Pouches such as Packaging, Events, Souvenirs, etc.",
+    summary: {
+      id: "Landing page konversi tinggi untuk bisnis garmen custom pouch kemasan, suvenir event, dan packaging korporat.",
+      en: "High-converting landing page for custom pouch manufacturing, corporate event merchandise, and premium packaging.",
     },
-    image: ProjectPouchpack,
-    link: "https://google.com",
+    challenge: {
+      id: "Calon pembeli sering kesulitan memahami spesifikasi bahan, ukuran custom pouch, dan estimasi pemesanan jumlah besar.",
+      en: "Prospective clients struggled to visualize pouch dimensions, material choices, and wholesale volume pricing.",
+    },
+    solution: {
+      id: "Landing page terstruktur dengan galeri material, simulasi ukuran, dan tombol pemesanan WhatsApp yang langsung mengirim detail jenis pouch pilihan.",
+      en: "Structured page with material galleries, dimensional comparison, and automated WhatsApp order pre-filling.",
+    },
+    techStack: ["Astro", "Tailwind CSS", "Svelte", "WhatsApp API"],
+    features: {
+      id: ["Katalog Produk Interaktif", "WhatsApp Order Generator", "Kalkulator Estimasi Bahan", "Testimoni Klien"],
+      en: ["Interactive Product Catalog", "WhatsApp Order Generator", "Material Estimation Helper", "Client Reviews"],
+    },
+    imageSrc: ProjectPouchpack.src,
+    demoUrl: "https://pouchpack.id",
   },
   {
+    id: "altasha-bookstore",
+    category: "system",
+    categoryLabel: { id: "Web App & Dashboard", en: "Web App & Dashboard" },
+    client: "Altasha Book Store",
     title: {
-      id: "Book Store: Altasha Book Store Inventory App",
-      en: "Book Store: Altasha Book Store Inventory App",
+      id: "Book Store: Altasha Inventory & Sales App",
+      en: "Book Store: Altasha Inventory & Sales App",
     },
-    detail: {
-      id: "Klien kami Altasha merupakan sebuah toko buku online membutuhkan manajemen inventaris untuk pengelolaan buku dan akuntansi penjualan & pembelian buku.",
-      en: "Our client Altasha is an online bookstore needs inventory management for book management and book sales & purchase accounting.",
+    summary: {
+      id: "Sistem aplikasi web manajemen inventaris gudang buku, barcode scanning, dan pencatatan akuntansi penjualan secara real-time.",
+      en: "Web-based inventory management, barcode scanning, and real-time sales & purchase accounting application.",
     },
-    image: ProjectABS,
-    link: "https://google.com",
+    challenge: {
+      id: "Pencatatan manual stok buku ribuan judul menyebabkan sering terjadinya selisih stok dan keterlambatan laporan laba rugi.",
+      en: "Manual stock tracking across thousands of book titles led to discrepancies and delayed revenue reporting.",
+    },
+    solution: {
+      id: "Kami membangun dashboard cloud terpusat dengan sistem manajemen SKU, pelacakan stok otomatis, dan ringkasan finansial berkala.",
+      en: "We developed a centralized cloud dashboard with SKU management, automated stock replenishment alerts, and profit reports.",
+    },
+    techStack: ["React", "Node.js", "PostgreSQL", "Tailwind CSS"],
+    features: {
+      id: ["Manajemen Multi-Gudang", "Laporan Penjualan Realtime", "Export PDF & Excel", "Manajemen Hak Akses"],
+      en: ["Multi-warehouse Management", "Real-time Sales Analytics", "PDF & Excel Export", "Role-based Access"],
+    },
+    imageSrc: ProjectABS.src,
+    demoUrl: "#",
   },
   {
+    id: "jago-ternak",
+    category: "system",
+    categoryLabel: { id: "Web App & Dashboard", en: "Web App & Dashboard" },
+    client: "Jago Ternak",
     title: {
-      id: "Poultry Startup: Jago Ternak Monitoring App",
-      en: "Poultry Startup: Jago Ternak Monitoring App",
+      id: "Poultry Startup: Jago Ternak Monitoring Platform",
+      en: "Poultry Startup: Jago Ternak Monitoring Platform",
     },
-    detail: {
-      id: "Klien kami Jago Ternak merupakan startup di industri peternakan yang saat ini fokus dalam mengembangkan industri peternakan ayam kampung. Jago Ternak membutuhkan website landing page sekaligus website manajemen peternakan yang meliputi dashboard, pelaporan, dan laman edukasi bagi mitra Jago Ternak.",
-      en: "Our client Jago Ternak is a startup in the livestock industry that currently focuses on developing the native chicken farming industry. Jago Ternak needs a landing page website as well as a farm management website that includes dashboards, reporting, and educational pages for Jago Ternak partners.",
+    summary: {
+      id: "Platform komprehensif yang menggabungkan landing page edukasi kemitraan dengan dashboard monitoring peternakan ayam modern.",
+      en: "Comprehensive platform combining partner acquisition landing page with a modern poultry IoT & livestock monitoring dashboard.",
     },
-    image: ProjectJagoTernak,
-    link: "https://google.com",
+    challenge: {
+      id: "Kemitraan peternakan memerlukan dashboard transparansi kondisi kandang, pencatatan pakan, dan bagi hasil mitra peternak.",
+      en: "Livestock partners required transparent monitoring of farm conditions, feed cycles, and dividend distributions.",
+    },
+    solution: {
+      id: "Membangun platform terpadu: portal publik untuk registrasi mitra baru serta portal privat mitra untuk memantau siklus panen peternakan.",
+      en: "Engineered an integrated platform: public portal for partner onboarding and private partner dashboard for harvest cycles.",
+    },
+    techStack: ["SvelteKit", "Tailwind CSS", "REST API", "PostgreSQL"],
+    features: {
+      id: ["Monitoring Siklus Ternak", "Kalkulator Estimasi Bagi Hasil", "Portal Edukasi Mitra", "Notifikasi Panen"],
+      en: ["Livestock Cycle Monitoring", "Yield & Revenue Calculator", "Partner Learning Portal", "Harvest Alerts"],
+    },
+    imageSrc: ProjectJagoTernak.src,
+    demoUrl: "#",
   },
 ];
 ---
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll("#portfolio button.read-more").forEach((el) => {
-      el.addEventListener("click", () => {
-        el.parentElement
-          ?.querySelector(".card-detail")
-          ?.classList.remove("line-clamp-4");
-      });
-    });
-  });
-</script>
-
 <section
-  class="flex flex-col gap-10 px-5 pb-10 max-w-screen-xl lg:px-10 xl:px-0 xl:mx-auto md:min-h-screen"
+  class="relative py-20 lg:py-28 max-w-screen-xl mx-auto px-5 lg:px-10 xl:px-8"
   id="portfolio"
 >
-  <h2
-    class="text-2xl pt-20 md:pt-24 md:text-3xl xl:text-4xl font-bold max-w-screen-xl"
-  >
-    {t.h2}
-  </h2>
+  <!-- Ambient background glow -->
+  <div class="pointer-events-none absolute -left-20 top-1/2 w-80 h-80 bg-primary/5 rounded-full blur-3xl"></div>
 
-  <div
-    class="flex overflow-auto px-10 pb-10 -mx-10 -mb-10 md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 xl:gap-10"
-  >
-    {
-      cardItems.map((item) => (
-        <Card
-          title={item.title[locale]}
-          detail={item.detail[locale]}
-          image={item.image}
-          customClass="shrink-0 w-80 md:w-auto"
-          size="lg"
-          titleLink={t.cardMore}
-        />
-      ))
-    }
+  <!-- Header -->
+  <div class="flex flex-col items-center text-center gap-4 mb-12 max-w-3xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+      <span>🚀</span>
+      <span>{t.badge}</span>
+    </div>
+
+    <h2
+      class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-900 leading-tight"
+      set:html={t.h2}
+    />
+
+    <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
+      {t.subtitle}
+    </p>
   </div>
+
+  <!-- Interactive Svelte Portfolio Component -->
+  <PortfolioShowcase client:visible locale={locale} projects={projects} />
 </section>
