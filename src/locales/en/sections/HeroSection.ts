@@ -3,7 +3,7 @@ export const translations = {
   h1: 'Explore the <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">Digital Future</span> with <span class="text-primary">Pemuda Handal</span>',
   p: "Trusted professional technology partner for modern websites, custom web & mobile apps, and immersive 360° virtual experiences that accelerate your business growth.",
   cta: "View Portfolio",
-  ctaSecondary: "Calculate Project Cost",
+  ctaSecondary: "Free Consultation",
   stat1Value: "50+",
   stat1Label: "Successful Projects",
   stat2Value: "99.8%",

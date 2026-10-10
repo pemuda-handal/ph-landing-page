@@ -4,7 +4,7 @@ import LogoWhite from "@assets/images/logo-white.svg";
 import LanguageSelector from "./LanguageSelector.svelte";
 import { useTranslations } from "astro-nanointl";
 
-const pageLocale = Astro.currentLocale || "id";
+const pageLocale = (Astro.currentLocale || "id") as "id" | "en";
 const { translations } = await import(
   `../locales/${pageLocale}/components/HeaderBlog.ts`
 );

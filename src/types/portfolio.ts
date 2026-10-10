@@ -10,5 +10,4 @@ export interface ProjectItem {
   techStack: string[];
   features: { id: string[]; en: string[] };
   imageSrc: string;
-  demoUrl?: string;
 }

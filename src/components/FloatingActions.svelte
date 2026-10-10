@@ -1,10 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  export let locale: "id" | "en" = "id";
+  interface Props {
+    locale?: "id" | "en";
+  }
 
-  let showScrollTop = false;
-  let showTooltip = true;
+  let { locale = "id" }: Props = $props();
+
+  let showScrollTop = $state(false);
+  let showTooltip = $state(true);
 
   onMount(() => {
     const handleScroll = () => {
@@ -39,7 +43,7 @@
       </span>
       <button
         type="button"
-        on:click={dismissTooltip}
+        onclick={dismissTooltip}
         class="text-slate-400 hover:text-slate-600 text-xs ml-1 font-bold"
         aria-label="Dismiss message"
       >
@@ -53,7 +57,7 @@
     {#if showScrollTop}
       <button
         type="button"
-        on:click={scrollToTop}
+        onclick={scrollToTop}
         class="w-11 h-11 rounded-full bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 shadow-lg flex items-center justify-center transition-all duration-200 hover:-translate-y-1 active:translate-y-0"
         aria-label="Scroll to top"
       >

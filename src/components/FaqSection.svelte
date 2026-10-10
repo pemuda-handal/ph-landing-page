@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let locale: "id" | "en" = "id";
+  interface Props {
+    locale?: "id" | "en";
+  }
+
+  let { locale = "id" }: Props = $props();
 
   interface FaqItem {
     id: number;
@@ -83,7 +87,7 @@
     },
   ];
 
-  let openFaqId: number | null = 1;
+  let openFaqId = $state<number | null>(1);
 
   function toggleFaq(id: number) {
     openFaqId = openFaqId === id ? null : id;
@@ -101,7 +105,7 @@
       >
         <button
           type="button"
-          on:click={() => toggleFaq(faq.id)}
+          onclick={() => toggleFaq(faq.id)}
           class="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 transition-colors"
           aria-expanded={isOpen}
         >

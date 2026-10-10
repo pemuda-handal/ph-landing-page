@@ -1,17 +1,23 @@
 <script lang="ts">
   import { useTranslations } from "astro-nanointl";
 
-  export let searchQuery: string = "";
-  export let pageLocale: "id" | "en" = "id";
+  interface Props {
+    searchQuery?: string;
+    pageLocale?: "id" | "en";
+  }
 
-  let t = useTranslations(
-    {
-      placeholder: "Masukkan kata kunci pencarian...",
-    },
-    {
-      data: {},
-      locale: pageLocale,
-    },
+  let { searchQuery = $bindable(""), pageLocale = "id" }: Props = $props();
+
+  let t = $state(
+    useTranslations(
+      {
+        placeholder: "Masukkan kata kunci pencarian...",
+      },
+      {
+        data: {},
+        locale: pageLocale,
+      }
+    )
   );
 
   import(`../locales/${pageLocale}/components/SearchBar.ts`).then(
@@ -23,12 +29,12 @@
         {
           data: translations,
           locale: pageLocale,
-        },
+        }
       );
-    },
+    }
   );
 
-  let input: HTMLInputElement;
+  let input = $state<HTMLInputElement>();
 </script>
 
 <div class="relative w-full">
@@ -44,7 +50,7 @@
   <button
     type="button"
     class="absolute top-1/2 -translate-y-[50%] right-5 cursor-default"
-    on:click={() => input.focus()}
+    onclick={() => input?.focus()}
     aria-label="search"
   >
     <svg

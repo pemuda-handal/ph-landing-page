@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let locale: "id" | "en" = "id";
+  interface Props {
+    locale?: "id" | "en";
+  }
+
+  let { locale = "id" }: Props = $props();
 
   interface Testimonial {
     id: number;
@@ -89,7 +93,7 @@
     },
   ];
 
-  let currentIndex = 0;
+  let currentIndex = $state(0);
 
   function nextSlide() {
     currentIndex = (currentIndex + 1) % testimonials.length;
@@ -159,7 +163,7 @@
       <div class="flex items-center gap-2">
         <button
           type="button"
-          on:click={prevSlide}
+          onclick={prevSlide}
           class="w-10 h-10 rounded-full border border-slate-200 hover:border-primary/50 hover:bg-primary/5 text-slate-700 flex items-center justify-center transition-all shadow-sm active:scale-95"
           aria-label="Previous testimonial"
         >
@@ -167,7 +171,7 @@
         </button>
         <button
           type="button"
-          on:click={nextSlide}
+          onclick={nextSlide}
           class="w-10 h-10 rounded-full bg-primary hover:bg-secondary text-white flex items-center justify-center transition-all shadow-md active:scale-95"
           aria-label="Next testimonial"
         >
@@ -182,7 +186,7 @@
     {#each testimonials as _, idx}
       <button
         type="button"
-        on:click={() => goToSlide(idx)}
+        onclick={() => goToSlide(idx)}
         class="h-2.5 rounded-full transition-all duration-300 {currentIndex === idx
           ? 'w-8 bg-primary'
           : 'w-2.5 bg-slate-300 hover:bg-slate-400'}"

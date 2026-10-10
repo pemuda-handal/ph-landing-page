@@ -2,20 +2,32 @@
   import { onMount } from "svelte";
   import { useTranslations } from "astro-nanointl";
 
-  export let filters: { name: string; value: string }[] = [];
-  export let selectedFilter: string = "";
-  export let isDropdownOpen = false;
-  export let onFilterChange: (value: string) => void;
-  export let pageLocale: "id" | "en" = "id";
+  interface Props {
+    filters?: { name: string; value: string }[];
+    selectedFilter?: string;
+    isDropdownOpen?: boolean;
+    onFilterChange: (value: string) => void;
+    pageLocale?: "id" | "en";
+  }
 
-  let t = useTranslations(
-    {
-      sort: "Urutkan",
-    },
-    {
-      data: {},
-      locale: pageLocale,
-    },
+  let {
+    filters = [],
+    selectedFilter = "",
+    isDropdownOpen = $bindable(false),
+    onFilterChange,
+    pageLocale = "id",
+  }: Props = $props();
+
+  let t = $state(
+    useTranslations(
+      {
+        sort: "Urutkan",
+      },
+      {
+        data: {},
+        locale: pageLocale,
+      }
+    )
   );
 
   import(`../locales/${pageLocale}/components/FilterDropdown.ts`).then(
@@ -27,9 +39,9 @@
         {
           data: translations,
           locale: pageLocale,
-        },
+        }
       );
-    },
+    }
   );
 
   function toggleFilter() {
@@ -37,7 +49,7 @@
   }
 
   onMount(() => {
-    window.addEventListener("click", (event) => {
+    const handleClickOutside = (event: MouseEvent) => {
       const element = event.target as HTMLElement;
       const isFilterDropdown =
         element.classList.contains("filter-dropdown") ||
@@ -45,7 +57,10 @@
       if (!isFilterDropdown) {
         isDropdownOpen = false;
       }
-    });
+    };
+
+    window.addEventListener("click", handleClickOutside);
+    return () => window.removeEventListener("click", handleClickOutside);
   });
 </script>
 
@@ -53,10 +68,9 @@
   class="filter-dropdown relative bg-gradient-to-r from-primary to-secondary rounded-full p-[2px] z-20"
 >
   <button
+    type="button"
     class="bg-white md:py-3 md:px-5 w-[52px] h-[52px] md:w-auto md:h-auto rounded-full flex flex-row gap-20 justify-center md:justify-between items-center"
-    on:click={() => {
-      toggleFilter();
-    }}
+    onclick={toggleFilter}
   >
     <span
       class="hidden md:inline bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text font-medium"
@@ -184,11 +198,13 @@
       >
         {t.sort}
         <button
+          type="button"
           aria-label="sort"
-          on:click={() => {
+          onclick={() => {
             isDropdownOpen = false;
           }}
-          ><svg
+        >
+          <svg
             width="22"
             height="22"
             viewBox="0 0 24 24"
@@ -204,11 +220,12 @@
       </div>
       {#each filters as filter}
         <button
+          type="button"
           class="flex-row flex justify-between w-full py-2 px-5 bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text {filter.value ===
           selectedFilter
             ? 'font-medium text-secondary'
             : ''}"
-          on:click={() => onFilterChange(filter.value)}
+          onclick={() => onFilterChange(filter.value)}
         >
           {filter.name}
           <span class={filter.value === selectedFilter ? "" : "hidden"}>

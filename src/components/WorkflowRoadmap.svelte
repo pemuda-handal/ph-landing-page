@@ -1,5 +1,9 @@
 <script lang="ts">
-  export let locale: "id" | "en" = "id";
+  interface Props {
+    locale?: "id" | "en";
+  }
+
+  let { locale = "id" }: Props = $props();
 
   interface Step {
     id: number;
@@ -130,13 +134,13 @@
     },
   ];
 
-  let activeStepId = 1;
+  let activeStepId = $state(1);
 
   function setStep(id: number) {
     activeStepId = id;
   }
 
-  $: activeStep = steps.find((s) => s.id === activeStepId) || steps[0];
+  let activeStep = $derived(steps.find((s) => s.id === activeStepId) || steps[0]);
 </script>
 
 <div class="w-full mt-12 bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 lg:p-10 shadow-card">
@@ -160,7 +164,7 @@
     {#each steps as step}
       <button
         type="button"
-        on:click={() => setStep(step.id)}
+        onclick={() => setStep(step.id)}
         class="flex flex-col items-start p-4 rounded-2xl border text-left transition-all duration-200 relative overflow-hidden group {activeStepId ===
         step.id
           ? 'bg-primary text-white border-primary shadow-lg shadow-primary/25 scale-[1.02]'

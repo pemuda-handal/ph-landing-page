@@ -1,37 +1,43 @@
 <script lang="ts">
   import { onMount, tick } from "svelte";
 
-  export let pageLocale: "id" | "en" = "id";
+  interface Props {
+    pageLocale?: "id" | "en";
+  }
 
-  let currentLang: "id" | "en" = "id";
-  let isInitialized = false;
-  let isOpen = false;
+  let { pageLocale = "id" }: Props = $props();
+
+  let currentLang = $state<"id" | "en">(pageLocale);
+  let isInitialized = $state(false);
+  let isOpen = $state(false);
 
   onMount(async () => {
     const lang = localStorage.getItem("lang");
 
     if (lang == null) {
       localStorage.setItem("lang", "id");
-    } else if (lang == "id") {
+    } else if (lang === "id") {
       currentLang = "id";
-    } else if (lang == "en") {
+    } else if (lang === "en") {
       currentLang = "en";
     }
     await tick();
     isInitialized = true;
   });
 
-  $: if (isInitialized && currentLang) {
-    const { pathname } = new URL(window.location.href);
+  $effect(() => {
+    if (isInitialized && currentLang) {
+      const { pathname } = new URL(window.location.href);
 
-    if (currentLang !== pageLocale) {
-      if (currentLang === "id") {
-        window.location.href = `${pathname.replace(/\/en/g, "")}` || "/";
-      } else {
-        window.location.href = `/${currentLang}${pathname === "/" ? "" : pathname}`;
+      if (currentLang !== pageLocale) {
+        if (currentLang === "id") {
+          window.location.href = `${pathname.replace(/\/en/g, "")}` || "/";
+        } else {
+          window.location.href = `/${currentLang}${pathname === "/" ? "" : pathname}`;
+        }
       }
     }
-  }
+  });
 
   function toggleLanguageSelectorPopUp() {
     isOpen = !isOpen;
@@ -42,21 +48,16 @@
   }
 
   function changeLanguage(lang: "id" | "en") {
-    if (lang === "id") {
-      currentLang = "id";
-      localStorage.setItem("lang", "id");
-      closeLanguageSelector();
-    } else if (lang === "en") {
-      currentLang = "en";
-      localStorage.setItem("lang", "en");
-      closeLanguageSelector();
-    }
+    currentLang = lang;
+    localStorage.setItem("lang", lang);
+    closeLanguageSelector();
   }
 </script>
 
 <div class="relative z-10 w-32 font-bold">
   <button
-    on:click={toggleLanguageSelectorPopUp}
+    type="button"
+    onclick={toggleLanguageSelectorPopUp}
     class="flex flex-row gap-5 p-4 justify-start items-center w-full"
   >
     {#if currentLang == "id"}
@@ -127,8 +128,9 @@
         : 'flex-col-reverse'}"
     >
       <button
+        type="button"
         class="p-4 flex flex-row gap-5 justify-start items-center w-full"
-        on:click={() => changeLanguage("id")}
+        onclick={() => changeLanguage("id")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -159,8 +161,9 @@
       </button>
       <div class="border-b border-black border-opacity-50 w-3/4 mx-auto"></div>
       <button
+        type="button"
         class="p-4 flex flex-row gap-5 justify-start items-center w-full"
-        on:click={() => changeLanguage("en")}
+        onclick={() => changeLanguage("en")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -4,22 +4,28 @@
   import { useTranslations } from "astro-nanointl";
   import { toJsLocale } from "@utils/astroToJsLocale";
 
-  export let pageLocale: "id" | "en" = "id";
+  interface Props {
+    pageLocale?: "id" | "en";
+  }
 
-  let currentSlideIndex = 0;
-  let blogs: Blog[] = [];
-  let slideInterval: number;
-  let isLoading = false;
+  let { pageLocale = "id" }: Props = $props();
 
-  let t = useTranslations(
-    {
-      readMore: "Baca Selengkapnya",
-      by: "Oleh",
-    },
-    {
-      data: {},
-      locale: pageLocale,
-    },
+  let currentSlideIndex = $state(0);
+  let blogs = $state<Blog[]>([]);
+  let slideInterval: ReturnType<typeof setInterval>;
+  let isLoading = $state(false);
+
+  let t = $state(
+    useTranslations(
+      {
+        readMore: "Baca Selengkapnya",
+        by: "Oleh",
+      },
+      {
+        data: {},
+        locale: pageLocale,
+      }
+    )
   );
 
   import(`../locales/${pageLocale}/components/CarouselHeroBlog.ts`).then(
@@ -32,21 +38,26 @@
         {
           data: translations,
           locale: pageLocale,
-        },
+        }
       );
-    },
+    }
   );
 
   const BASE_API_URL = import.meta.env.PUBLIC_API_URL;
 
   const getBlogs = async () => {
     isLoading = true;
-    const response = await fetch(
-      `${BASE_API_URL}/api/blogs?pagination[pageSize]=3&sort[0]=publishedAt:desc&sort[1]=visited_counter:desc`,
-    );
-    const responseJson = await response.json();
-    blogs = responseJson.data;
-    isLoading = false;
+    try {
+      const response = await fetch(
+        `${BASE_API_URL}/api/blogs?pagination[pageSize]=3&sort[0]=publishedAt:desc&sort[1]=visited_counter:desc`
+      );
+      const responseJson = await response.json();
+      blogs = responseJson.data || [];
+    } catch {
+      blogs = [];
+    } finally {
+      isLoading = false;
+    }
   };
 
   function slideRight() {
@@ -203,7 +214,7 @@
                         year: "numeric",
                         month: "short",
                         day: "numeric",
-                      },
+                      }
                     )}
                   </p>
                   <p>
@@ -231,11 +242,11 @@
   {#if blogs.length > 1}
     <div class="absolute bottom-[5%] lg:-bottom-10 z-30 w-full lg:w-[30%]">
       <div class="flex flex-row justify-between px-5">
-        {#each blogs as blog, index}
+        {#each blogs as _, index}
           <button
             aria-label="page-{index}"
             type="button"
-            on:click={() => changeSelectedItem(index)}
+            onclick={() => changeSelectedItem(index)}
             class="p-1 rounded-full w-[30%] shadow-lg {currentSlideIndex ===
             index
               ? 'bg-gradient-to-br from-primary to-secondary'

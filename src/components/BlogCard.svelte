@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export interface Blog {
     id: number;
     attributes: {
@@ -94,27 +94,34 @@
 
 <script lang="ts">
   import { toJsLocale } from "@utils/astroToJsLocale";
-
   import { useTranslations } from "astro-nanointl";
 
   const BASE_API_URL = import.meta.env.PUBLIC_API_URL;
-  export let blog: Blog | null = null;
-  export let pageLocale: "id" | "en" = "id";
 
-  let blogUrl =
+  interface Props {
+    blog?: Blog | null;
+    pageLocale?: "id" | "en";
+  }
+
+  let { blog = null, pageLocale = "id" }: Props = $props();
+
+  let blogUrl = $derived(
     pageLocale === "id"
       ? `/blog/${blog?.attributes.slug}`
-      : `/${pageLocale}/blog/${blog?.attributes.slug}`;
+      : `/${pageLocale}/blog/${blog?.attributes.slug}`
+  );
 
-  let t = useTranslations(
-    {
-      readMore: "Baca Selengkapnya",
-      by: "Oleh",
-    },
-    {
-      data: {},
-      locale: pageLocale,
-    },
+  let t = $state(
+    useTranslations(
+      {
+        readMore: "Baca Selengkapnya",
+        by: "Oleh",
+      },
+      {
+        data: {},
+        locale: pageLocale,
+      }
+    )
   );
 
   import(`../locales/${pageLocale}/components/BlogCard.ts`).then(
@@ -127,9 +134,9 @@
         {
           data: translations,
           locale: pageLocale,
-        },
+        }
       );
-    },
+    }
   );
 </script>
 
@@ -157,7 +164,7 @@
             year: "numeric",
             month: "short",
             day: "numeric",
-          },
+          }
         )}
       </div>
     </div>

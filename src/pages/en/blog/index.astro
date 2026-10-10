@@ -8,7 +8,7 @@ import BlogsList from "@sections/BlogsList.svelte";
 import ConnectSection from "@sections/ConnectSection.astro";
 import { useTranslations } from "astro-nanointl";
 
-const locale = Astro.currentLocale || "id";
+const locale = (Astro.currentLocale || "en") as "id" | "en";
 const { translations } = await import(
   `../../../locales/${locale}/pages/blog/index.ts`
 );

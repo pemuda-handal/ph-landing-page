@@ -3,7 +3,7 @@ export const translations = {
   h1: 'Jelajahi <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary">Masa Depan Digital</span> Bersama <span class="text-primary">Pemuda Handal</span>',
   p: "Mitra teknologi profesional untuk pengembangan website modern, aplikasi web & mobile kustom, serta pengalaman virtual 360° yang mendorong pertumbuhan bisnis Anda.",
   cta: "Lihat Portofolio",
-  ctaSecondary: "Hitung Estimasi Biaya",
+  ctaSecondary: "Konsultasi Gratis",
   stat1Value: "50+",
   stat1Label: "Proyek Sukses",
   stat2Value: "99.8%",

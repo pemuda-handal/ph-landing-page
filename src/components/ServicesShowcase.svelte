@@ -1,6 +1,4 @@
 <script lang="ts">
-  export let locale: "id" | "en" = "id";
-
   interface Industry {
     id: string;
     name: { id: string; en: string };
@@ -17,10 +15,14 @@
     imageSrc: string;
     features: { id: string[]; en: string[] };
     externalUrl?: string;
-    isVirtualReality?: boolean;
   }
 
-  export let services: Service[] = [];
+  interface Props {
+    locale?: "id" | "en";
+    services?: Service[];
+  }
+
+  let { locale = "id", services = [] }: Props = $props();
 
   const industries: Industry[] = [
     {
@@ -85,11 +87,12 @@
     },
   ];
 
-  let selectedIndustryId = "all";
-  let expandedServiceId: string | null = null;
-  let isVrDemoActive = false;
+  let selectedIndustryId = $state("all");
+  let expandedServiceId = $state<string | null>(null);
 
-  $: activeIndustry = industries.find((i) => i.id === selectedIndustryId) || industries[0];
+  let activeIndustry = $derived(
+    industries.find((i) => i.id === selectedIndustryId) || industries[0]
+  );
 
   function toggleExpand(id: string) {
     expandedServiceId = expandedServiceId === id ? null : id;
@@ -115,7 +118,7 @@
       {#each industries as industry}
         <button
           type="button"
-          on:click={() => (selectedIndustryId = industry.id)}
+          onclick={() => (selectedIndustryId = industry.id)}
           class="flex items-center gap-2 px-4 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 {selectedIndustryId ===
           industry.id
             ? 'bg-primary text-white shadow-md shadow-primary/25 scale-105'
@@ -170,36 +173,7 @@
               </span>
             </div>
           {/if}
-
-          <!-- VR Interactive Teaser button for VinteroVR -->
-          {#if service.isVirtualReality}
-            <div class="absolute bottom-3 right-3">
-              <button
-                type="button"
-                on:click={() => (isVrDemoActive = !isVrDemoActive)}
-                class="px-3 py-1.5 rounded-xl bg-black/70 hover:bg-black/90 text-white text-xs font-bold backdrop-blur-md transition-all flex items-center gap-1.5 shadow-md"
-              >
-                <span>🔄</span>
-                <span>{isVrDemoActive ? (locale === 'en' ? 'Close VR Teaser' : 'Tutup Teaser') : (locale === 'en' ? 'Try 360° Teaser' : 'Coba Teaser 360°')}</span>
-              </button>
-            </div>
-          {/if}
         </div>
-
-        <!-- 360 Interactive Simulation Box for VinteroVR -->
-        {#if service.isVirtualReality && isVrDemoActive}
-          <div class="bg-slate-950 p-4 text-white text-center flex flex-col items-center gap-2.5 animate-fade-in border-y border-purple-500/30">
-            <div class="flex items-center justify-between w-full text-xs font-bold text-purple-300">
-              <span class="flex items-center gap-1"><span>🌐</span> 360° Panoramic Simulation</span>
-              <span class="text-[10px] bg-purple-900/60 px-2 py-0.5 rounded text-purple-200">Interactive</span>
-            </div>
-            <div class="w-full h-28 bg-gradient-to-r from-purple-900/40 via-indigo-900/60 to-purple-900/40 rounded-xl border border-purple-500/20 flex flex-col items-center justify-center p-3 text-xs gap-1.5 cursor-grab active:cursor-grabbing hover:border-purple-400/50 transition-colors">
-              <span class="text-2xl animate-spin" style="animation-duration: 10s;">🎡</span>
-              <span class="font-semibold text-slate-200">{locale === 'en' ? 'Virtual Tour 360° View Ready' : 'Simulasi Tur Virtual 360° Interaktif'}</span>
-              <span class="text-[10px] text-slate-400">{locale === 'en' ? 'Supports gyroscope, mobile touch & VR headset' : 'Mendukung giroskop ponsel, layar sentuh & kacamata VR'}</span>
-            </div>
-          </div>
-        {/if}
 
         <!-- Service Info -->
         <div class="p-6 flex flex-col flex-1 justify-between gap-5">
@@ -214,7 +188,7 @@
             <!-- Expandable Feature Checklist -->
             <button
               type="button"
-              on:click={() => toggleExpand(service.id)}
+              onclick={() => toggleExpand(service.id)}
               class="self-start text-xs font-bold text-primary hover:text-secondary flex items-center gap-1 mt-1 transition-colors"
             >
               <span>{expandedServiceId === service.id ? (locale === 'en' ? 'Hide Features' : 'Sembunyikan Fitur') : (locale === 'en' ? 'View Included Features' : 'Lihat Fitur Termasuk')}</span>

@@ -5,32 +5,38 @@
   import { onDestroy, onMount } from "svelte";
   import { useTranslations } from "astro-nanointl";
 
-  export let pageLocale: "id" | "en" = "id";
+  interface Props {
+    pageLocale?: "id" | "en";
+  }
+
+  let { pageLocale = "id" }: Props = $props();
 
   const BASE_API_URL = import.meta.env.PUBLIC_API_URL;
 
-  let blogs: Blog[] = [];
-  let isLoading = false;
-  let initialLoad = true;
-  let page = 1;
-  let pageCount = 1;
-  let searchQuery = "";
-  let isSortDropdownOpen = false;
-  let selectedSort = "publishedAt:desc";
-  let sorts: { name: string; value: string }[] = [];
-  let searchDebounce: number;
+  let blogs = $state<Blog[]>([]);
+  let isLoading = $state(false);
+  let initialLoad = $state(true);
+  let page = $state(1);
+  let pageCount = $state(1);
+  let searchQuery = $state("");
+  let isSortDropdownOpen = $state(false);
+  let selectedSort = $state("publishedAt:desc");
+  let sorts = $state<{ name: string; value: string }[]>([]);
+  let searchDebounce: ReturnType<typeof setTimeout>;
 
-  let t = useTranslations(
-    {
-      newest: "Terbaru",
-      oldest: "Terlama",
-      aToZ: "A ke Z",
-      zToA: "Z ke A",
-    },
-    {
-      data: {},
-      locale: pageLocale,
-    },
+  let t = $state(
+    useTranslations(
+      {
+        newest: "Terbaru",
+        oldest: "Terlama",
+        aToZ: "A ke Z",
+        zToA: "Z ke A",
+      },
+      {
+        data: {},
+        locale: pageLocale,
+      }
+    )
   );
 
   import(`../locales/${pageLocale}/sections/BlogsList.ts`).then(
@@ -45,7 +51,7 @@
         {
           data: translations,
           locale: pageLocale,
-        },
+        }
       );
 
       sorts = [
@@ -66,12 +72,12 @@
           value: "title:desc",
         },
       ];
-    },
+    }
   );
 
   const fetchBlogs = async (
-    { page = 1, searchQuery = "", sort = "publishedAt:desc" } = {},
-    isMore = false,
+    { page: targetPage = 1, searchQuery: targetQuery = "", sort: targetSort = "publishedAt:desc" } = {},
+    isMore = false
   ) => {
     if (isLoading) return;
 
@@ -81,14 +87,18 @@
       blogs = [];
     }
 
-    const response = await fetch(
-      `${BASE_API_URL}/api/blogs?pagination[page]=${page}&pagination[pageSize]=6&sort=${sort}&filters[$or][0][title][$containsi]=${searchQuery}&filters[$or][1][keywords][$containsi]=${searchQuery}`,
-    );
-    const responseJson = await response.json();
-    blogs = [...blogs, ...responseJson.data];
-    pageCount = responseJson.meta.pagination.pageCount;
-
-    isLoading = false;
+    try {
+      const response = await fetch(
+        `${BASE_API_URL}/api/blogs?pagination[page]=${targetPage}&pagination[pageSize]=6&sort=${targetSort}&filters[$or][0][title][$containsi]=${targetQuery}&filters[$or][1][keywords][$containsi]=${targetQuery}`
+      );
+      const responseJson = await response.json();
+      blogs = isMore ? [...blogs, ...(responseJson.data || [])] : (responseJson.data || []);
+      pageCount = responseJson.meta?.pagination?.pageCount || 1;
+    } catch {
+      if (!isMore) blogs = [];
+    } finally {
+      isLoading = false;
+    }
   };
 
   const onLoadMore = () => {
@@ -99,29 +109,19 @@
         searchQuery,
         sort: selectedSort,
       },
-      true,
+      true
     );
   };
 
   const onSortChange = (sort: string) => {
     selectedSort = sort;
     isSortDropdownOpen = false;
+    page = 1;
     fetchBlogs({
-      page,
+      page: 1,
       searchQuery,
       sort,
     });
-  };
-
-  const onSearchChange = (query: string) => {
-    clearTimeout(searchDebounce);
-    searchDebounce = setTimeout(() => {
-      fetchBlogs({
-        page,
-        searchQuery: query,
-        sort: selectedSort,
-      });
-    }, 500);
   };
 
   onMount(() => {
@@ -133,7 +133,23 @@
     clearTimeout(searchDebounce);
   });
 
-  $: onSearchChange(searchQuery);
+  let hasMounted = false;
+  $effect(() => {
+    const query = searchQuery;
+    if (!hasMounted) {
+      hasMounted = true;
+      return;
+    }
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => {
+      page = 1;
+      fetchBlogs({
+        page: 1,
+        searchQuery: query,
+        sort: selectedSort,
+      });
+    }, 500);
+  });
 </script>
 
 <div class="flex flex-row justify-between items-end gap-5">
@@ -149,17 +165,17 @@
   />
 </div>
 <div class="mt-5 grid md:grid-cols-2 xl:grid-cols-3 gap-5">
-  {#if isLoading}
+  {#if isLoading && blogs.length === 0}
     {#each Array(6) as _}
       <BlogCard {pageLocale} />
     {/each}
   {:else}
     {#each blogs as blog}
-      <BlogCard {blog} {pageLocale}></BlogCard>
+      <BlogCard {blog} {pageLocale} />
     {/each}
   {/if}
 </div>
-{#if !initialLoad && blogs.length === 0}
+{#if !initialLoad && blogs.length === 0 && !isLoading}
   <div class="flex flex-col items-center justify-center mt-10">
     <img src="/images/no-data.jpg" alt="Data tidak ditemukan" class="md:w-80" />
     <a
@@ -170,10 +186,11 @@
     <p class="text-center mt-5 text-[#999999] text-sm">Data tidak ditemukan</p>
   </div>
 {/if}
-{#if pageCount !== page}
+{#if pageCount !== page && blogs.length > 0}
   <button
+    type="button"
     class="flex flex-col items-center font-semibold py-4 text-primary uppercase mt-10 gap-2 w-full text-sm"
-    on:click={onLoadMore}
+    onclick={onLoadMore}
   >
     Muat Lebih Banyak
     <svg
